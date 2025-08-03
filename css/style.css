@@ -62,6 +62,12 @@ html {
   font-size: 16px;
 }
 
+/* Optimize scrolling performance */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
   font-family: var(--font-primary);
   font-weight: var(--font-weight-regular);
@@ -1215,6 +1221,157 @@ ul {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+}
+
+/* ===== Mission Page Styles ===== */
+.mission-content-section {
+  padding: var(--space-3xl) 0 var(--space-3xl) 0;
+  background: linear-gradient(135deg, 
+    rgba(117, 175, 239, 0.03) 0%, 
+    rgba(255, 255, 255, 0.8) 50%, 
+    rgba(121, 237, 175, 0.03) 100%);
+  position: relative;
+  will-change: auto;
+  transform: translateZ(0);
+}
+
+.mission-content-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(117,175,239,0.05)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.mission-title {
+  font-size: 3rem;
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+  background: linear-gradient(135deg, #75AFEF 0%, #79EDAF 50%, #75AFEF 100%);
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 4s ease-in-out infinite;
+  margin-bottom: var(--space-md);
+  position: relative;
+  z-index: 1;
+}
+
+.mission-subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  opacity: 0.9;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 50px auto;
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+
+.mission-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.mission-statement {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.mission-block {
+  background: rgba(255, 255, 255, 0.9);
+  padding: var(--space-xl);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: left;
+}
+
+.mission-block.primary {
+  background: linear-gradient(135deg, 
+    rgba(117, 175, 239, 0.12) 0%, 
+    rgba(255, 255, 255, 0.95) 50%, 
+    rgba(121, 237, 175, 0.12) 100%);
+  border: 1px solid rgba(117, 175, 239, 0.2);
+}
+
+.mission-block.highlight {
+  background: linear-gradient(135deg, 
+    rgba(121, 237, 175, 0.15) 0%, 
+    rgba(255, 255, 255, 0.95) 50%, 
+    rgba(117, 175, 239, 0.15) 100%);
+  border: 1px solid rgba(121, 237, 175, 0.3);
+}
+
+
+
+.mission-block h3 {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+  background: linear-gradient(135deg, #2D4A6B 0%, #3A7C6B 50%, #2D4A6B 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.mission-block p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  opacity: 0.9;
+  position: relative;
+  z-index: 1;
+  margin-bottom: var(--space-md);
+}
+
+.mission-block p:last-child {
+  margin-bottom: 0;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .mission-content-section {
+    padding: var(--space-xl) 0;
+  }
+  
+  .mission-title {
+    font-size: 2.2rem;
+    margin-bottom: var(--space-sm);
+  }
+  
+  .mission-subtitle {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+  
+  .mission-block {
+    padding: var(--space-lg);
+  }
+  
+  .mission-block h3 {
+    font-size: 1.3rem;
+  }
+  
+  .mission-block p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
 }
 
 /* ===== App Description Section ===== */
