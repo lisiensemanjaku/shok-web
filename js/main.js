@@ -265,52 +265,62 @@
     };
   }
 
-  // ===== Simple Carousel =====
-  let currentPosition = 0;
-  const totalImages = 10;
-  const imagesPerView = 3;
-  const maxPosition = totalImages - imagesPerView;
+  // ===== True Infinite Scroll Carousel =====
+let currentPosition = 3; // Start at position 3 (showing first real image)
+const originalImages = 10;
+const totalImages = 16; // 3 duplicates + 10 original + 3 duplicates
+const imagesPerView = 3;
 
-  function updateCarouselPosition() {
-    const carousel = document.getElementById('carouselImages');
-    if (!carousel) return;
-    
-    // Responsive image width based on screen size
-    const isMobile = window.innerWidth <= 480;
-    const imageWidth = isMobile ? 110 : 260;
-    const gap = isMobile ? 4 : 8;
-    const offset = -(currentPosition * (imageWidth + gap));
-    carousel.style.transform = `translateX(${offset}px)`;
+function updateCarouselPosition(smooth = true) {
+  const carousel = document.getElementById('carouselImages');
+  if (!carousel) return;
+  
+  // Responsive image width based on screen size
+  const isMobile = window.innerWidth <= 480;
+  const imageWidth = isMobile ? 110 : 260;
+  const gap = isMobile ? 4 : 8;
+  const offset = -(currentPosition * (imageWidth + gap));
+  
+  carousel.style.transition = smooth ? 'transform 0.3s ease' : 'none';
+  carousel.style.transform = `translateX(${offset}px)`;
+}
+
+function nextImage() {
+  currentPosition++;
+  updateCarouselPosition(true);
+  
+  // When we reach the end duplicates, jump back to the real beginning
+  if (currentPosition >= totalImages - imagesPerView) {
+    setTimeout(() => {
+      currentPosition = 3; // Jump to real first image position
+      updateCarouselPosition(false);
+    }, 300);
   }
+}
 
-  function nextImage() {
-    if (currentPosition < maxPosition) {
-      currentPosition++;
-    } else {
-      currentPosition = 0; // Loop to beginning
-    }
-    updateCarouselPosition();
+function previousImage() {
+  currentPosition--;
+  updateCarouselPosition(true);
+  
+  // When we reach the beginning duplicates, jump to the real end
+  if (currentPosition <= 0) {
+    setTimeout(() => {
+      currentPosition = originalImages; // Jump to real last image position
+      updateCarouselPosition(false);
+    }, 300);
   }
+}
 
-  function previousImage() {
-    if (currentPosition > 0) {
-      currentPosition--;
-    } else {
-      currentPosition = maxPosition; // Loop to end
-    }
-    updateCarouselPosition();
-  }
+// Initialize carousel when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  updateCarouselPosition(false);
+});
 
-  // Initialize carousel when DOM is ready
-  document.addEventListener('DOMContentLoaded', function() {
-    updateCarouselPosition();
-  });
+// Update carousel on window resize
+window.addEventListener('resize', () => updateCarouselPosition(false));
 
-  // Update carousel on window resize
-  window.addEventListener('resize', updateCarouselPosition);
-
-  // Make functions available globally
-  window.nextImage = nextImage;
-  window.previousImage = previousImage;
+// Make functions available globally
+window.nextImage = nextImage;
+window.previousImage = previousImage;
 
 })(); 

@@ -1472,7 +1472,7 @@ ul {
   justify-content: center;
   gap: var(--space-lg);
   margin-top: var(--space-lg);
-  height: 460px;
+  height: 540px;
 }
 
 .carousel-container {
@@ -1486,12 +1486,20 @@ ul {
   gap: 8px;
 }
 
-.carousel-images img {
+.image-container {
   width: 260px;
-  height: 460px;
-  object-fit: contain;
-  border-radius: var(--radius-md);
+  height: 540px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
   flex-shrink: 0;
+  display: block;
+}
+
+.carousel-images img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .carousel-arrow {
