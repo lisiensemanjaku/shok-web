@@ -102,7 +102,7 @@
     }, observerOptions);
 
     // Observe elements for animation
-    const animateElements = document.querySelectorAll('.feature-card, .contact-email, .description-block, .concept-compact, .feature-group');
+    const animateElements = document.querySelectorAll('.feature-card, .contact-email, .description-block, .concept-compact');
     animateElements.forEach(el => {
       el.style.animationPlayState = 'paused';
       observer.observe(el);
@@ -265,6 +265,52 @@
     };
   }
 
+  // ===== Simple Carousel =====
+  let currentPosition = 0;
+  const totalImages = 10;
+  const imagesPerView = 3;
+  const maxPosition = totalImages - imagesPerView;
 
+  function updateCarouselPosition() {
+    const carousel = document.getElementById('carouselImages');
+    if (!carousel) return;
+    
+    // Responsive image width based on screen size
+    const isMobile = window.innerWidth <= 480;
+    const imageWidth = isMobile ? 110 : 260;
+    const gap = isMobile ? 4 : 8;
+    const offset = -(currentPosition * (imageWidth + gap));
+    carousel.style.transform = `translateX(${offset}px)`;
+  }
+
+  function nextImage() {
+    if (currentPosition < maxPosition) {
+      currentPosition++;
+    } else {
+      currentPosition = 0; // Loop to beginning
+    }
+    updateCarouselPosition();
+  }
+
+  function previousImage() {
+    if (currentPosition > 0) {
+      currentPosition--;
+    } else {
+      currentPosition = maxPosition; // Loop to end
+    }
+    updateCarouselPosition();
+  }
+
+  // Initialize carousel when DOM is ready
+  document.addEventListener('DOMContentLoaded', function() {
+    updateCarouselPosition();
+  });
+
+  // Update carousel on window resize
+  window.addEventListener('resize', updateCarouselPosition);
+
+  // Make functions available globally
+  window.nextImage = nextImage;
+  window.previousImage = previousImage;
 
 })(); 

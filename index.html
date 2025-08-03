@@ -22,10 +22,13 @@
         <div class="nav-container">
             <div class="nav-logo">
                 <img src="images/shok-icon.svg" alt="Shok" class="logo">
+                <div class="nav-text">
+                    <h1 class="nav-title gradient-text">ShokApp</h1>
+                    <p class="nav-subtitle">Help when you need it</p>
+                </div>
             </div>
             <ul class="nav-menu">
                 <li><a href="#home" class="nav-link">Home</a></li>
-                <li><a href="#features" class="nav-link">Features</a></li>
                 <li><a href="#core-concepts" class="nav-link">How It Works</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
                 <li><a href="privacy.html" class="nav-link">Privacy</a></li>
@@ -41,111 +44,62 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-container">
-            <div class="hero-content">
-                <div class="app-branding">
-                    <h1 class="app-name gradient-text">ShokApp</h1>
-                    <p class="app-subtitle">Help when you need it</p>
-                    <div class="app-meta">
-                        <span class="app-category">Social Networking • Lifestyle</span>
+            <div class="hero-title-section">
+                <h1 class="welcome-title">Welcome to the Shok Community</h1>
+                <div class="welcome-subtitle">
+                    <h2 class="subtitle-main">Make life smoother</h2>
+                    <p class="subtitle-description">Ask for support or lend your talents, build trust points, and connect with peers who've always got your back.</p>
+                </div>
+            </div>
+            
+            <!-- Screenshots Carousel -->
+            <div class="simple-carousel">
+                <button class="carousel-arrow carousel-prev" onclick="previousImage()">‹</button>
+                
+                <div class="carousel-container">
+                    <div class="carousel-images" id="carouselImages">
+                        <img src="images/screenshot_1.jpeg" alt="ShokApp Screenshot 1">
+                        <img src="images/screenshot_2.jpeg" alt="ShokApp Screenshot 2">
+                        <img src="images/screenshot_3.jpeg" alt="ShokApp Screenshot 3">
+                        <img src="images/screenshot_4.jpeg" alt="ShokApp Screenshot 4">
+                        <img src="images/screenshot_5.jpeg" alt="ShokApp Screenshot 5">
+                        <img src="images/screenshot_6.jpeg" alt="ShokApp Screenshot 6">
+                        <img src="images/screenshot_7.jpeg" alt="ShokApp Screenshot 7">
+                        <img src="images/screenshot_8.jpeg" alt="ShokApp Screenshot 8">
+                        <img src="images/screenshot_9.jpeg" alt="ShokApp Screenshot 9">
+                        <img src="images/screenshot_10.jpeg" alt="ShokApp Screenshot 10">
                     </div>
                 </div>
                 
-                <div class="app-promo">
-                    <p class="promo-text">Make life smoother: ask for support or lend your talents, build trust points, and connect with peers who've always got your back.</p>
-                </div>
-                
-                <div class="hero-description">
-                    <p>Register with an invite code, get starter credits, then spend credits to request help or earn them by helping others or getting your friends to join. <strong>No credits, no posts.</strong> Bid to help: the lowest‑credit offer wins.</p>
-                </div>
-                
-                <div class="hero-actions">
-                    <a href="#" class="btn btn-primary download-btn">
-                        <img src="images/app-store-badge.svg" alt="Download on the App Store" class="app-store-badge">
-                    </a>
-                    <a href="#features" class="btn btn-secondary">Learn More</a>
-                </div>
+                <button class="carousel-arrow carousel-next" onclick="nextImage()">›</button>
             </div>
-            <div class="hero-image">
-                <div class="hero-logo">
-                    <img src="images/shok-icon.svg" alt="ShokApp Logo" class="hero-logo-img">
+            
+            <div class="hero-layout">
+                <div class="hero-left">
+                    <div class="hero-actions">
+                        <a href="#core-concepts" class="btn btn-secondary">Learn More</a>
+                    </div>
+                </div>
+                
+                <div class="hero-right">
+                    <div class="app-promo">
+                    </div>
+                    
+                    <div class="hero-description">
+                        <p>Register with an invite code, get starter credits, then spend credits to request help or earn them by helping others or getting your friends to join. <strong>No credits, no posts.</strong> Bid to help: the lowest‑credit offer wins.</p>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="hero-scroll">
-            <a href="#features" class="scroll-indicator">
+            <a href="#core-concepts" class="scroll-indicator">
                 <span>Scroll to explore</span>
                 <div class="scroll-arrow"></div>
             </a>
         </div>
     </section>
 
-    <!-- Key Features Section -->
-    <section id="features" class="key-features">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Key Features</h2>
-                <p class="section-subtitle">Everything you need to connect and collaborate</p>
-            </div>
-            
-            <div class="features-list">
-                <div class="feature-group">
-                    <div class="feature-item">
-                        <h4>Contact Details</h4>
-                        <p>Communicate via the email you signed in with or add your phone number to connect in your favourite messaging app.</p>
-                    </div>
-                    
-                    <div class="feature-item">
-                        <h4>Profile Customisation</h4>
-                        <p>Upload a profile picture, write a bio, and showcase your skills and interests.</p>
-                    </div>
-                    
-                    <div class="feature-item">
-                        <h4>Invite System</h4>
-                        <p>Generate invite codes to grow a trusted community. Earn referral rewards when they join.</p>
-                    </div>
-                    
-                    <div class="feature-item">
-                        <h4>Save & Sort Posts</h4>
-                        <p>Bookmark requests and filter the Feed by the criteria that interests you most.</p>
-                    </div>
-                </div>
-                
-                <div class="feature-group">
-                    <div class="feature-item">
-                        <h4>Comment & Reply</h4>
-                        <p>Ask questions to clarify details directly on posts through threaded comments.</p>
-                    </div>
-                    
-                    <div class="feature-item">
-                        <h4>Expiry & Deadlines</h4>
-                        <p>Each post shows an expiry date indicating the deadline by when the task must be completed.</p>
-                    </div>
-                    
-                    <div class="feature-item">
-                        <h4>Edit & Delete</h4>
-                        <p>Edit post details or delete posts anytime.</p>
-                    </div>
-                    
-                    <div class="feature-item">
-                        <h4>Home Tab Sections</h4>
-                        <p>"Feed" displays only others' posts while "Your Posts" shows posts you've created.</p>
-                    </div>
-                </div>
-                
-                <div class="feature-group">
-                    <div class="feature-item">
-                        <h4>My Bids Tab</h4>
-                        <p>Track posts you've bid on and view your active offers in one place.</p>
-                    </div>
-                    
-                    <div class="feature-item">
-                        <h4>Committed Credits</h4>
-                        <p>The credits that are the current offer in your active posts are temporarily blocked and can't be used for the offer in new posts.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+
 
 
 
