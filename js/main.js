@@ -276,9 +276,20 @@ function updateCarouselPosition(smooth = true) {
   if (!carousel) return;
   
   // Responsive image width based on screen size
-  const isMobile = window.innerWidth <= 480;
-  const imageWidth = isMobile ? 110 : 260;
-  const gap = isMobile ? 4 : 8;
+  const isSmallMobile = window.innerWidth <= 480;
+  const isMediumMobile = window.innerWidth <= 768;
+  
+  let imageWidth, gap;
+  if (isSmallMobile) {
+    imageWidth = 180;
+    gap = 6;
+  } else if (isMediumMobile) {
+    imageWidth = 220;
+    gap = 8;
+  } else {
+    imageWidth = 260;
+    gap = 8;
+  }
   const offset = -(currentPosition * (imageWidth + gap));
   
   carousel.style.transition = smooth ? 'transform 0.3s ease' : 'none';
@@ -311,9 +322,47 @@ function previousImage() {
   }
 }
 
+// Add touch/swipe support for mobile
+function setupTouchNavigation() {
+  const carousel = document.querySelector('.carousel-container');
+  if (!carousel) return;
+  
+  let startX = 0;
+  let isDragging = false;
+  
+  carousel.addEventListener('touchstart', function(e) {
+    startX = e.touches[0].clientX;
+    isDragging = true;
+  }, { passive: true });
+  
+  carousel.addEventListener('touchmove', function(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+  }, { passive: false });
+  
+  carousel.addEventListener('touchend', function(e) {
+    if (!isDragging) return;
+    
+    const endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
+    const threshold = 50; // Minimum swipe distance
+    
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        nextImage(); // Swipe left = next image
+      } else {
+        previousImage(); // Swipe right = previous image
+      }
+    }
+    
+    isDragging = false;
+  }, { passive: true });
+}
+
 // Initialize carousel when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
   updateCarouselPosition(false);
+  setupTouchNavigation();
 });
 
 // Update carousel on window resize
