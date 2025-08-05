@@ -335,34 +335,56 @@ function setupTouchNavigation() {
   if (!carousel) return;
   
   let startX = 0;
+  let startY = 0;
   let isDragging = false;
+  let isHorizontalSwipe = false;
   
   carousel.addEventListener('touchstart', function(e) {
     startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
     isDragging = true;
+    isHorizontalSwipe = false;
   }, { passive: true });
   
   carousel.addEventListener('touchmove', function(e) {
     if (!isDragging) return;
-    e.preventDefault();
+    
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const deltaX = Math.abs(currentX - startX);
+    const deltaY = Math.abs(currentY - startY);
+    
+    // Determine if this is a horizontal or vertical swipe
+    if (deltaX > 10 || deltaY > 10) {
+      isHorizontalSwipe = deltaX > deltaY;
+    }
+    
+    // Only prevent default for horizontal swipes to maintain vertical scrolling
+    if (isHorizontalSwipe && deltaX > deltaY) {
+      e.preventDefault();
+    }
   }, { passive: false });
   
   carousel.addEventListener('touchend', function(e) {
     if (!isDragging) return;
     
-    const endX = e.changedTouches[0].clientX;
-    const diff = startX - endX;
-    const threshold = 50; // Minimum swipe distance
-    
-    if (Math.abs(diff) > threshold) {
-      if (diff > 0) {
-        nextImage(); // Swipe left = next image
-      } else {
-        previousImage(); // Swipe right = previous image
+    // Only process swipe if it was clearly horizontal
+    if (isHorizontalSwipe) {
+      const endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+      const threshold = 50; // Minimum swipe distance
+      
+      if (Math.abs(diff) > threshold) {
+        if (diff > 0) {
+          nextImage(); // Swipe left = next image
+        } else {
+          previousImage(); // Swipe right = previous image
+        }
       }
     }
     
     isDragging = false;
+    isHorizontalSwipe = false;
   }, { passive: true });
 }
 
