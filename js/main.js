@@ -269,7 +269,11 @@
 let currentPosition = 3; // Start at position 3 (showing first real image)
 const originalImages = 10;
 const totalImages = 16; // 3 duplicates + 10 original + 3 duplicates
-const imagesPerView = 3;
+
+function getImagesPerView() {
+  const isMobile = window.innerWidth <= 768;
+  return isMobile ? 1 : 3; // Show 1 image on mobile, 3 on desktop
+}
 
 function updateCarouselPosition(smooth = true) {
   const carousel = document.getElementById('carouselImages');
@@ -278,18 +282,20 @@ function updateCarouselPosition(smooth = true) {
   // Responsive image width based on screen size
   const isSmallMobile = window.innerWidth <= 480;
   const isMediumMobile = window.innerWidth <= 768;
+  const isMobile = window.innerWidth <= 768;
   
   let imageWidth, gap;
-  if (isSmallMobile) {
-    imageWidth = 180;
-    gap = 6;
-  } else if (isMediumMobile) {
-    imageWidth = 220;
-    gap = 8;
+  if (isMobile) {
+    // On mobile, get the actual container width for full-width images
+    const container = document.querySelector('.carousel-container');
+    imageWidth = container ? container.offsetWidth : 
+                (isSmallMobile ? 280 : 360);
+    gap = 0; // No gap on mobile since we show only one image
   } else {
     imageWidth = 260;
     gap = 8;
   }
+  
   const offset = -(currentPosition * (imageWidth + gap));
   
   carousel.style.transition = smooth ? 'transform 0.3s ease' : 'none';
@@ -301,6 +307,7 @@ function nextImage() {
   updateCarouselPosition(true);
   
   // When we reach the end duplicates, jump back to the real beginning
+  const imagesPerView = getImagesPerView();
   if (currentPosition >= totalImages - imagesPerView) {
     setTimeout(() => {
       currentPosition = 3; // Jump to real first image position
