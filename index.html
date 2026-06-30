@@ -730,7 +730,9 @@ class Component extends DCLogic {
     // (cards must track the finger 1:1). Setting transition + transform together
     // each call animates from the previously-painted position.
     const TRANS = 'transform 0.62s cubic-bezier(0.33,1,0.68,1), opacity 0.5s ease';
-    const animate = this._cfLaidOut && !this._cfDragging;
+    // Animate on every layout after the initial snap — including during drag and
+    // touch, so the wheel spins the same way it does for the prev/next buttons.
+    const animate = this._cfLaidOut;
 
     cards.forEach((card, i) => {
       const off = i - active;
