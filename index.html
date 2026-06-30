@@ -252,7 +252,7 @@
         <div data-cf-stage style="position:relative; height:clamp(430px,58vw,580px); perspective:1900px; cursor:grab;">
           <sc-for list="{{ screenshots }}" as="shot" hint-placeholder-count="10">
             <div data-cf-card data-index="{{ $index }}" role="button" tabindex="0" onClick="{{ cfCardClick }}" style="position:absolute; top:50%; left:50%; width:clamp(204px,25vw,248px); transform-style:preserve-3d; will-change:transform, opacity; transition:transform 0.55s cubic-bezier(0.22,0.61,0.36,1), opacity 0.55s ease; cursor:pointer;">
-              <img src="{{ shot }}" alt="Shok app screen" draggable="false" loading="lazy" decoding="async" style="width:100%; height:auto; display:block; border-radius:12px; box-shadow:0 30px 60px -16px rgba(0,0,0,0.8); user-select:none; -webkit-user-drag:none;" />
+              <img src="{{ shot }}" alt="Shok app screen" draggable="false" decoding="async" style="width:100%; height:auto; display:block; border-radius:12px; box-shadow:0 30px 60px -16px rgba(0,0,0,0.8); user-select:none; -webkit-user-drag:none;" />
             </div>
           </sc-for>
         </div>
@@ -608,6 +608,25 @@ class Component extends DCLogic {
     const cards = Array.from(wrap.querySelectorAll('[data-cf-card]'));
     if (!stage || !cards.length) return;
     wrap._cfReady = true;
+
+    // Eager markup means every gallery image fetches up front (no lazy heuristic
+    // skipping the rotated-away cards). This heals any that still fail on a
+    // flaky/throttled connection by retrying, so a blank card recovers on its
+    // own instead of needing a full page reload.
+    cards.forEach(card => {
+      const img = card.querySelector('img');
+      if (!img || img._cfWired) return;
+      img._cfWired = true;
+      img.loading = 'eager';
+      const retry = () => {
+        const t = (img._cfTries || 0) + 1; img._cfTries = t;
+        if (t > 3) return;
+        const base = img.src.split('?')[0];
+        setTimeout(() => { img.src = base + '?retry=' + t; }, 500 * t);
+      };
+      img.addEventListener('error', retry);
+      if (img.complete && img.naturalWidth === 0) retry();
+    });
 
     const n = cards.length;
     if (this._cfActive == null || this._cfActive >= n) this._cfActive = Math.floor((n - 1) / 2);
