@@ -1,0 +1,298 @@
+/**
+ * Shok Design System — Colors & Typography
+ * Dual-theme: DARK is the default (the app ships dark-only); LIGHT is a fully
+ * polished companion theme for designing in both appearances.
+ *
+ * Usage:
+ *   <html>                      → dark (default)
+ *   <html data-theme="dark">    → dark (explicit)
+ *   <html data-theme="light">   → light
+ *
+ * The theme attribute works on ANY element, so a single page can show both
+ * (e.g. a light card embedded in a dark shell) — not just the document root.
+ *
+ * Source of truth: Shok/Shok/Assets.xcassets/Colors (*.colorset) +
+ * uploads/color_usage_map.md. Dark values mirror the shipped asset catalog.
+ * Light values are a designed, accessibility-tuned palette (not a raw inversion).
+ */
+
+/* ─── DARK THEME (default) ─────────────────────────────────────────────── */
+:root,
+[data-theme="dark"] {
+  /* Brand accents */
+  --color-primary-green:          #79EDAF;
+  --color-primary-green-muted:    rgba(121, 237, 175, 0.5);
+  --color-primary-green-subtle:   rgba(121, 237, 175, 0.1);
+  --color-primary-yellow:         #FFCE2F;
+  --color-accent-blue:            #75AFEF;
+  --color-accent-blue-muted:      rgba(117, 175, 239, 0.5);
+  --color-error-red:              #FF6B57;
+  --color-error-red-subtle:       rgba(255, 107, 87, 0.2);
+
+  /* Backgrounds & surfaces */
+  --color-app-bg:                 #000000;
+  --color-card-bg:                rgba(45, 43, 48, 0.8);    /* #2D2B30 @ 80% */
+  --color-card-bg-solid:          #2D2B30;
+  --color-elevated-surface:       rgba(62, 61, 65, 0.9);    /* #3E3D41 @ 90% */
+  --color-elevated-surface-solid: #3E3D41;
+  --color-highlight-bg:           rgba(255, 255, 255, 0.1);
+  --color-overlay-medium:         rgba(255, 255, 255, 0.3);
+  --color-dimmed-overlay:         rgba(0, 0, 0, 0.5);
+  --color-shimmer-highlight:      rgba(255, 255, 255, 0.35);
+
+  /* Text hierarchy */
+  --color-text-primary:           #FFFFFF;
+  --color-text-secondary:         rgba(255, 255, 255, 0.85);
+  --color-text-tertiary:          #C2C2C3;
+  --color-text-quaternary:        #C4C4C5;
+  --color-text-muted:             #868586;
+  --color-text-subtle:            #5D5D5E;
+  --color-text-disabled:          rgba(255, 255, 255, 0.5);
+  --color-text-on-accent:         #000000;
+
+  /* Borders */
+  --color-border-subtle:          rgba(255, 255, 255, 0.2);
+
+  /* Interactive */
+  --color-btn-gray-bg:            rgba(255, 255, 255, 0.85);
+  --color-btn-gray-bg-pressed:    rgba(255, 255, 255, 0.6);
+
+  /* Elevation — dark relies on background contrast, shadows are deep & subtle */
+  --shadow-card:  0 2px 12px rgba(0, 0, 0, 0.6);
+  --shadow-sm:    0 1px  4px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── LIGHT THEME (polished) ───────────────────────────────────────────── */
+/*
+ * Designed, not inverted. Key moves over the old raw-flip light values:
+ *   • Soft cool canvas (#F4F5F7) with WHITE cards that lift on real shadow —
+ *     replaces the muddy #E0E0E0-on-#FFF flatness.
+ *   • A smooth 7-step cool-neutral text ramp (fixes quaternary == secondary).
+ *   • Accents deepened for AA-on-white legibility while keeping brand identity
+ *     (mint → emerald, sky → true blue, coral → strong red, gold → deep amber).
+ *   • Gray button flips to a light fill so the universal black label stays legible.
+ */
+[data-theme="light"] {
+  /* Brand accents — deepened for contrast on light surfaces.
+   * Solid greens/blues are LOCKED by a two-sided constraint: deep enough to read
+   * as text on white (green 4.3:1 bold, blue 5.0:1) yet light enough that the
+   * UNIVERSAL black label stays legible on the green button (4.9:1). They can't
+   * move without breaking one side — so the polish goes into the *muted* fills.
+   * Muted alphas are raised over the old raw-flip values: a bubble/tile fill over
+   * the light canvas needs more pigment to register as "green"/"blue" than the
+   * same token does as a thin toggle tint — at 0.40 they went muddy/anemic. */
+  --color-primary-green:          #0E8C4F;
+  --color-primary-green-muted:    rgba(14, 140, 79, 0.46);  /* sent bubble, toggle-on, read receipt */
+  --color-primary-green-subtle:   rgba(14, 140, 79, 0.12);
+  --color-primary-yellow:         #A87400;
+  --color-accent-blue:            #0A6CE0;
+  --color-accent-blue-muted:      rgba(10, 108, 224, 0.5);  /* received bubble, disabled send */
+  --color-error-red:              #D62A22;
+  --color-error-red-subtle:       rgba(214, 42, 34, 0.12);
+
+  /* Backgrounds & surfaces — canvas recedes, cards pop white on shadow */
+  --color-app-bg:                 #F4F5F7;
+  --color-card-bg:                #FFFFFF;
+  --color-card-bg-solid:          #FFFFFF;
+  --color-elevated-surface:       #ECEDF1;   /* inset controls, sheets, badges */
+  --color-elevated-surface-solid: #ECEDF1;
+  --color-highlight-bg:           rgba(20, 21, 28, 0.08);  /* deep-link flash — must register over white card */
+  --color-overlay-medium:         rgba(0, 0, 0, 0.22);
+  --color-dimmed-overlay:         rgba(0, 0, 0, 0.06);
+  --color-shimmer-highlight:      rgba(255, 255, 255, 0.85);
+
+  /* Text hierarchy — cool-neutral ramp, darkest → lightest */
+  --color-text-primary:           #16161B;
+  --color-text-secondary:         #3C3C44;
+  --color-text-tertiary:          #6C6C75;
+  --color-text-quaternary:        #57575F;
+  --color-text-muted:             #8C8C95;
+  --color-text-subtle:            #BCBCC4;
+  --color-text-disabled:          rgba(22, 22, 27, 0.34);
+  --color-text-on-accent:         #000000;
+
+  /* Borders */
+  --color-border-subtle:          rgba(20, 21, 28, 0.12);
+
+  /* Interactive — light gray fill keeps the universal black label legible */
+  --color-btn-gray-bg:            #E6E7EB;
+  --color-btn-gray-bg-pressed:    #D6D8DE;
+
+  /* Elevation — a WHITE card on the near-white canvas has almost no value
+   * contrast, so the shadow has to do all the figure/ground work. A hairline
+   * ring (1px spread) draws the card edge; a tight contact shadow + a soft wide
+   * shadow give it real lift off #F4F5F7. */
+  --shadow-card:  0 0 0 1px rgba(20, 21, 28, 0.04),
+                  0 1px 2px rgba(20, 21, 28, 0.06),
+                  0 10px 28px -8px rgba(20, 21, 28, 0.16);
+  --shadow-sm:    0 0 0 1px rgba(20, 21, 28, 0.04),
+                  0 1px 3px rgba(20, 21, 28, 0.10);
+}
+
+/* ─── TYPOGRAPHY ──────────────────────────────────────────────────────── */
+/*
+ * Shok uses two typefaces:
+ *   • "Helvetica Neue"  — primary: all headings, body copy, post content
+ *   • "Helvetica"       — utility: smaller labels, info text
+ *   • .system (SF Pro)  — controls: inputs, pickers, buttons rendered by UIKit
+ *
+ * Google Fonts substitute: "Neue Haas Grotesk" is unavailable on GF.
+ * Using "DM Sans" as nearest open-source substitute for Helvetica Neue.
+ * Flag: ideally supply Helvetica Neue or use system-ui on Apple platforms.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+:root {
+  /* Font stacks */
+  --font-display:   "Helvetica Neue", "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:      "Helvetica Neue", "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-utility:   "Helvetica",      "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-system:    -apple-system,    BlinkMacSystemFont, "SF Pro Text", sans-serif;
+
+  /* Size scale (from Swift layout constants) */
+  --text-nav-title:    20px;  /* Navigation bar titles — bold */
+  --text-name:         18px;  /* Post author name, body content — bold/regular */
+  --text-body:         18px;  /* Post content, main body */
+  --text-action:       16px;  /* Buttons, message bubbles, row labels */
+  --text-meta:         14px;  /* Small labels, expiry, bid count */
+  --text-caption:      13px;  /* Credits in bidder row */
+  --text-timestamp:    11px;  /* Message timestamps */
+
+  /* Weight tokens */
+  --weight-bold:       700;
+  --weight-semibold:   600;
+  --weight-medium:     500;
+  --weight-regular:    400;
+
+  /* Line heights */
+  --leading-tight:     1.2;
+  --leading-normal:    1.4;
+  --leading-relaxed:   1.6;
+}
+
+/* ─── SEMANTIC TEXT STYLES ────────────────────────────────────────────── */
+.text-nav-title {
+  font-family: var(--font-display);
+  font-size: var(--text-nav-title);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  line-height: var(--leading-tight);
+}
+
+.text-name {
+  font-family: var(--font-body);
+  font-size: var(--text-name);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  line-height: var(--leading-tight);
+}
+
+.text-body {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: var(--weight-regular);
+  color: var(--color-text-primary);
+  line-height: var(--leading-normal);
+}
+
+.text-action {
+  font-family: var(--font-body);
+  font-size: var(--text-action);
+  font-weight: var(--weight-regular);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-normal);
+}
+
+.text-meta {
+  font-family: var(--font-utility);
+  font-size: var(--text-meta);
+  font-weight: var(--weight-regular);
+  color: var(--color-text-muted);
+  line-height: var(--leading-normal);
+}
+
+.text-caption {
+  font-family: var(--font-utility);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  color: var(--color-primary-green);
+  line-height: var(--leading-tight);
+}
+
+.text-link {
+  font-family: var(--font-body);
+  font-size: var(--text-action);
+  font-weight: var(--weight-regular);
+  color: var(--color-accent-blue);
+  text-decoration: none;
+}
+
+.text-hashtag {
+  color: var(--color-accent-blue);
+}
+
+.text-error {
+  color: var(--color-error-red);
+}
+
+.text-green {
+  color: var(--color-primary-green);
+}
+
+/* ─── SPACING TOKENS (from Swift layout constants) ───────────────────── */
+:root {
+  --space-1:   4px;   /* creditsSpacing, nameSpacing in BidderRow */
+  --space-2:   8px;   /* infoSpacing in PostView, textTranslateSpacing */
+  --space-3:  12px;   /* PostHeader spacing, buttonItemSpacing */
+  --space-4:  16px;   /* cardPadding, listPadding, itemSpacing */
+  --space-5:  20px;   /* actionSpacing in BidderRow, screenTopPadding */
+  --space-6:  24px;   /* contentSpacing, screenHorizontalPadding */
+
+  /* Radii */
+  --radius-card:        16px;  /* cards, main containers */
+  --radius-bubble-lg:   18px;  /* message bubbles */
+  --radius-bubble-sm:    4px;  /* message bubble tail corner */
+  --radius-btn:          8px;  /* buttons — confirmed from app */
+  --radius-input:       10px;  /* text fields */
+  --radius-avatar-sm:    6px;  /* post profile image (small) */
+  --radius-avatar-lg:   20px;  /* profile tab avatar */
+  --radius-pill:      100px;   /* fully rounded pill buttons */
+}
+
+/* ─── COMPONENT BASE STYLES ─────────────────────────────────────────────*/
+.shok-card {
+  background: var(--color-card-bg);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-card);
+}
+
+.shok-btn-primary {
+  background: var(--color-primary-green);
+  color: var(--color-text-on-accent);
+  font-family: var(--font-body);
+  font-size: var(--text-action);
+  font-weight: var(--weight-semibold);
+  border-radius: var(--radius-pill);
+  border: none;
+  padding: 14px var(--space-6);
+  cursor: pointer;
+}
+
+.shok-btn-ghost {
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  font-size: var(--text-action);
+  font-weight: var(--weight-regular);
+  border: none;
+  cursor: pointer;
+}
+
+.shok-divider {
+  height: 1px;
+  background: var(--color-border-subtle);
+  border: none;
+  margin: 0;
+}

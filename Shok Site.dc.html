@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#000;}
+  body{font-family:"DM Sans",-apple-system,BlinkMacSystemFont,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+  a{text-decoration:none;color:inherit;}
+  ::selection{background:rgba(121,237,175,0.3);}
+  @keyframes shokFade{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes shokFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+  /* ─── Responsive polish (phone / tablet). Scoped to small screens so the
+     desktop layout is untouched. Targets stable structural hooks. ─── */
+  /* Mobile menu: hidden on desktop, the panel collapses to zero height */
+  .menupanel{display:none;}
+  .menulink{display:block;width:100%;text-align:left;background:none;border:none;border-radius:12px;cursor:pointer;font-family:inherit;font-size:17px;font-weight:600;color:#fff;padding:15px 16px;}
+  .menulink:active{background:rgba(255,255,255,0.06);}
+  @media (max-width:760px){
+    /* Nav: tighten and collapse the inline links into a hamburger from tablet
+       down — the three text links + CTA cramp and wrap in the 560–760 band. */
+    header nav{padding:11px 16px !important;gap:10px !important;}
+    header nav>div{gap:4px !important;}
+    header nav>div>button:not([data-menu-btn]){display:none !important;}
+    header nav>div>a{margin-left:0 !important;}
+    [data-menu-btn]{display:inline-flex !important;}
+    /* Slide-down panel */
+    .menupanel{display:block;overflow:hidden;max-height:0;border-top:0 solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:0 14px;transition:max-height 0.34s cubic-bezier(0.4,0,0.2,1),padding 0.34s ease;}
+    .menupanel.open{max-height:240px;padding:8px 14px 16px;border-top-width:1px;}
+    /* Hero/section side padding eases in on phones */
+    main>section{padding-left:18px !important;padding-right:18px !important;}
+    /* Privacy: drop the sticky on-page TOC and let the body run full width —
+       a stuck side rail above the content reads as dead space on a phone. */
+    main aside{display:none !important;}
+  }
+  @media (max-width:560px){
+    /* Tighten stacked-hero vertical gap and the App Store button */
+    main>section:first-child{gap:28px !important;padding-top:34px !important;}
+    /* Coverflow: a touch more side breathing room on small phones */
+    [data-coverflow]{padding-left:8px !important;padding-right:8px !important;}
+  }
+</style>
+</helmet>
+
+<div style="--accent: {{ accent }}; min-height:100vh; background:#000; color:#fff;">
+
+  <!-- ─── NAV ─────────────────────────────────────────── -->
+  <header style="position:sticky; top:0; z-index:50; background:rgba(0,0,0,0.72); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-bottom:1px solid rgba(255,255,255,0.08);">
+    <nav style="max-width:1180px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+      <button onClick="{{ goHome }}" style="display:flex; align-items:center; gap:11px; background:none; border:none; padding:0; cursor:pointer;">
+        <img src="assets/app_icon.png" alt="Shok" style="width:34px; height:34px; border-radius:9px; box-shadow:0 0 0 1px rgba(255,255,255,0.08);" />
+        <span style="font-size:21px; font-weight:700; color:#fff; letter-spacing:-0.02em;">Shok</span>
+      </button>
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <button onClick="{{ goHome }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:rgba(255,255,255,0.85); padding:8px 14px; border-radius:100px;" style-hover="background:rgba(255,255,255,0.06); color:#fff;">Home</button>
+        <button onClick="{{ goMission }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:rgba(255,255,255,0.85); padding:8px 14px; border-radius:100px;" style-hover="background:rgba(255,255,255,0.06); color:#fff;">Our Mission</button>
+        <button onClick="{{ goPrivacy }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:rgba(255,255,255,0.85); padding:8px 14px; border-radius:100px;" style-hover="background:rgba(255,255,255,0.06); color:#fff;">Privacy</button>
+        <a href="{{ appStore }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; background:var(--accent,#79EDAF); color:#000; font-weight:600; font-size:14px; padding:9px 18px; border-radius:100px; margin-left:6px;" style-hover="opacity:0.88;">
+          <svg viewBox="0 0 384 512" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
+          Get the app
+        </a>
+        <button data-menu-btn onClick="{{ toggleMenu }}" aria-label="Menu" style="display:none; align-items:center; justify-content:center; width:42px; height:42px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:11px; cursor:pointer; color:#fff; padding:0;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+        </button>
+      </div>
+    </nav>
+    <div data-menu-panel class="menupanel {{ menuOpenClass }}">
+      <button onClick="{{ goHome }}" class="menulink">Home</button>
+      <button onClick="{{ goMission }}" class="menulink">Our Mission</button>
+      <button onClick="{{ goPrivacy }}" class="menulink">Privacy</button>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════ HOME ═══════════════════════ -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <main>
+
+    <!-- HERO -->
+    <section style="position:relative; overflow:hidden; max-width:1180px; margin:0 auto; padding:clamp(48px,7vw,104px) 24px clamp(40px,6vw,72px); display:flex; flex-wrap:wrap; align-items:center; gap:48px;">
+      <div style="position:absolute; top:-80px; right:-120px; width:520px; height:520px; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb, var(--accent,#79EDAF) 22%, transparent) 0%, transparent 68%); filter:blur(8px); pointer-events:none; z-index:0;"></div>
+
+      <div data-reveal-group="0.1" style="position:relative; z-index:1; flex:1 1 420px; min-width:300px;">
+        <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border:1px solid rgba(255,255,255,0.14); border-radius:100px; background:rgba(255,255,255,0.03); margin-bottom:26px;">
+          <span style="width:7px; height:7px; border-radius:50%; background:var(--accent,#79EDAF); box-shadow:0 0 10px var(--accent,#79EDAF);"></span>
+          <span style="font-size:13px; font-weight:500; color:rgba(255,255,255,0.7);">Free to join · iOS · community-powered</span>
+        </div>
+        <h1 style="margin:0 0 22px; font-size:clamp(44px,6.4vw,78px); line-height:1.02; font-weight:700; letter-spacing:-0.035em; text-wrap:balance;">Help when<br>you need it.</h1>
+        <p style="margin:0 0 36px; font-size:clamp(17px,1.7vw,21px); line-height:1.5; color:rgba(255,255,255,0.7); max-width:480px;">Ask for support or lend your talents, earn credits, and connect with peers who've always got your back.</p>
+        <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+          <a href="{{ appStore }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:11px; background:var(--accent,#79EDAF); color:#000; padding:15px 26px; border-radius:100px;" style-hover="opacity:0.9; transform:translateY(-1px);">
+            <svg viewBox="0 0 384 512" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
+            <span style="display:flex; flex-direction:column; line-height:1; text-align:left;"><span style="font-size:11px; font-weight:500; opacity:0.7;">Download on the</span><span style="font-size:18px; font-weight:700; margin-top:3px;">App Store</span></span>
+          </a>
+          <button onClick="{{ goMission }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:16px; font-weight:600; color:#fff; padding:14px 8px; display:inline-flex; align-items:center; gap:7px;" style-hover="gap:11px; color:var(--accent,#79EDAF);">Why we built this <span style="font-size:18px;">→</span></button>
+        </div>
+      </div>
+
+      <div data-reveal data-reveal-rise="0" data-reveal-scale="0.93" style="position:relative; z-index:1; flex:1 1 300px; display:flex; justify-content:center; min-width:280px;">
+        <div style="position:relative; width:min(300px,78vw); animation:shokFloat 7s ease-in-out infinite;">
+          <div style="position:absolute; inset:-3% -8%; border-radius:52px; background:radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--accent,#79EDAF) 30%, transparent), transparent 70%); filter:blur(28px); z-index:0;"></div>
+          <img src="https://shok.app/images/screenshot_1.jpeg" alt="Shok app feed" style="position:relative; z-index:1; width:100%; height:auto; display:block; border-radius:6px; filter:drop-shadow(0 40px 80px rgba(0,0,0,0.85));" />
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST STRIP -->
+    <section style="max-width:1180px; margin:0 auto; padding:8px 24px 16px;">
+      <div data-reveal-group="0.12" style="display:flex; flex-wrap:wrap; gap:14px;">
+        <div style="flex:1 1 200px; background:rgba(45,43,48,0.55); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:18px 22px;">
+          <div style="font-size:26px; font-weight:700; color:var(--accent,#79EDAF); letter-spacing:-0.02em;">100</div>
+          <div style="font-size:14px; color:rgba(255,255,255,0.6); margin-top:4px;">starter credits on sign-up</div>
+        </div>
+        <div style="flex:1 1 200px; background:rgba(45,43,48,0.55); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:18px 22px;">
+          <div style="font-size:26px; font-weight:700; color:#fff; letter-spacing:-0.02em;">No money</div>
+          <div style="font-size:14px; color:rgba(255,255,255,0.6); margin-top:4px;">changes hands — ever</div>
+        </div>
+        <div style="flex:1 1 200px; background:rgba(45,43,48,0.55); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:18px 22px;">
+          <div style="font-size:26px; font-weight:700; color:#fff; letter-spacing:-0.02em;">Real people</div>
+          <div style="font-size:14px; color:rgba(255,255,255,0.6); margin-top:4px;">helping real neighbours</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(56px,7vw,96px) 24px;">
+      <div data-reveal style="margin-bottom:clamp(40px,5vw,68px); max-width:640px;">
+        <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:14px;">How Shok works</div>
+        <h2 style="margin:0; font-size:clamp(30px,4vw,46px); font-weight:700; letter-spacing:-0.03em; line-height:1.08;">A community where people genuinely help each other.</h2>
+      </div>
+      <div data-walk style="display:flex; flex-direction:column; gap:clamp(44px,6vw,92px);">
+
+        <!-- Step 1 -->
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:clamp(28px,5vw,72px);">
+          <div style="flex:1 1 380px; min-width:280px;">
+            <div style="position:relative; display:flex; align-items:center; justify-content:center; min-height:clamp(220px,26vw,320px); border-radius:26px; padding:clamp(20px,3vw,40px); border:1px solid rgba(255,255,255,0.07); background:radial-gradient(ellipse 75% 72% at 50% 40%, rgba(255,255,255,0.13), rgba(255,255,255,0.02) 56%, transparent 74%), linear-gradient(160deg, rgba(62,61,65,0.5), rgba(18,18,21,0.65)); box-shadow:0 30px 60px -30px rgba(0,0,0,0.7); overflow:hidden;">
+              <div style="position:absolute; inset:0; background:radial-gradient(circle at 50% 32%, color-mix(in srgb, var(--accent,#79EDAF) 13%, transparent), transparent 60%); pointer-events:none;"></div>
+              <img src="assets/onboarding/slide1.png" alt="People helping each other with everyday tasks" style="position:relative; width:auto; max-width:100%; max-height:280px; height:auto; display:block;" />
+            </div>
+          </div>
+          <div style="flex:1 1 320px; min-width:260px;">
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+              <span style="font-size:14px; font-weight:700; color:var(--accent,#79EDAF); letter-spacing:0.12em;">01</span>
+              <span style="flex:none; width:54px; height:1px; background:linear-gradient(90deg, color-mix(in srgb, var(--accent,#79EDAF) 55%, transparent), transparent);"></span>
+            </div>
+            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">Welcome to Shok</h3>
+            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">A community where people genuinely help each other. Not a marketplace, not a service app — just real people showing up for one another.</p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div style="display:flex; flex-direction:row-reverse; flex-wrap:wrap; align-items:center; gap:clamp(28px,5vw,72px);">
+          <div style="flex:1 1 380px; min-width:280px;">
+            <div style="position:relative; display:flex; align-items:center; justify-content:center; min-height:clamp(220px,26vw,320px); border-radius:26px; padding:clamp(20px,3vw,40px); border:1px solid rgba(255,255,255,0.07); background:radial-gradient(ellipse 75% 72% at 50% 40%, rgba(255,255,255,0.13), rgba(255,255,255,0.02) 56%, transparent 74%), linear-gradient(160deg, rgba(62,61,65,0.5), rgba(18,18,21,0.65)); box-shadow:0 30px 60px -30px rgba(0,0,0,0.7); overflow:hidden;">
+              <div style="position:absolute; inset:0; background:radial-gradient(circle at 50% 32%, color-mix(in srgb, var(--accent,#79EDAF) 13%, transparent), transparent 60%); pointer-events:none;"></div>
+              <img src="assets/onboarding/slide2.svg" alt="Creating a post in the Shok app" style="position:relative; width:auto; max-width:100%; max-height:280px; height:auto; display:block;" />
+            </div>
+          </div>
+          <div style="flex:1 1 320px; min-width:260px;">
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+              <span style="font-size:14px; font-weight:700; color:var(--accent,#79EDAF); letter-spacing:0.12em;">02</span>
+              <span style="flex:none; width:54px; height:1px; background:linear-gradient(90deg, color-mix(in srgb, var(--accent,#79EDAF) 55%, transparent), transparent);"></span>
+            </div>
+            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">Post what you need</h3>
+            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">Describe what you need, set the credits you're offering, and add <span style="color:#75AFEF; font-weight:600;">#keywords</span> so the right people can find it. You choose a deadline, and the post stays open until then.</p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:clamp(28px,5vw,72px);">
+          <div style="flex:1 1 380px; min-width:280px;">
+            <div style="position:relative; display:flex; align-items:center; justify-content:center; min-height:clamp(220px,26vw,320px); border-radius:26px; padding:clamp(20px,3vw,40px); border:1px solid rgba(255,255,255,0.07); background:radial-gradient(ellipse 75% 72% at 50% 40%, rgba(255,255,255,0.13), rgba(255,255,255,0.02) 56%, transparent 74%), linear-gradient(160deg, rgba(62,61,65,0.5), rgba(18,18,21,0.65)); box-shadow:0 30px 60px -30px rgba(0,0,0,0.7); overflow:hidden;">
+              <div style="position:absolute; inset:0; background:radial-gradient(circle at 50% 32%, color-mix(in srgb, var(--accent,#79EDAF) 13%, transparent), transparent 60%); pointer-events:none;"></div>
+              <img src="assets/onboarding/slide3.png" alt="One person helping another up a set of steps" style="position:relative; width:auto; max-width:100%; max-height:280px; height:auto; display:block;" />
+            </div>
+          </div>
+          <div style="flex:1 1 320px; min-width:260px;">
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+              <span style="font-size:14px; font-weight:700; color:var(--accent,#79EDAF); letter-spacing:0.12em;">03</span>
+              <span style="flex:none; width:54px; height:1px; background:linear-gradient(90deg, color-mix(in srgb, var(--accent,#79EDAF) 55%, transparent), transparent);"></span>
+            </div>
+            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">Offer to help</h3>
+            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">Browse what neighbours need near you and place a bid — accept the credits offered or name your own price. The poster picks who helps, and you can message each other to sort out the rest.</p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div style="display:flex; flex-direction:row-reverse; flex-wrap:wrap; align-items:center; gap:clamp(28px,5vw,72px);">
+          <div style="flex:1 1 380px; min-width:280px;">
+            <div style="position:relative; display:flex; align-items:center; justify-content:center; min-height:clamp(220px,26vw,320px); border-radius:26px; padding:clamp(20px,3vw,40px); border:1px solid rgba(255,255,255,0.07); background:radial-gradient(ellipse 75% 72% at 50% 40%, rgba(255,255,255,0.13), rgba(255,255,255,0.02) 56%, transparent 74%), linear-gradient(160deg, rgba(62,61,65,0.5), rgba(18,18,21,0.65)); box-shadow:0 30px 60px -30px rgba(0,0,0,0.7); overflow:hidden;">
+              <div style="position:absolute; inset:0; background:radial-gradient(circle at 50% 32%, color-mix(in srgb, var(--accent,#79EDAF) 13%, transparent), transparent 60%); pointer-events:none;"></div>
+              <img src="assets/onboarding/slide4.png" alt="Credits moving between community members" style="position:relative; width:auto; max-width:100%; max-height:280px; height:auto; display:block;" />
+            </div>
+          </div>
+          <div style="flex:1 1 320px; min-width:260px;">
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+              <span style="font-size:14px; font-weight:700; color:var(--accent,#79EDAF); letter-spacing:0.12em;">04</span>
+              <span style="flex:none; width:54px; height:1px; background:linear-gradient(90deg, color-mix(in srgb, var(--accent,#79EDAF) 55%, transparent), transparent);"></span>
+            </div>
+            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">Credits keep things fair</h3>
+            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">Everyone starts with some credits. Spend them to ask for help, they go to the helper whose bid you accept, and you earn them back by helping others. Invite someone and you both get a small boost.</p>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:clamp(28px,5vw,72px);">
+          <div style="flex:1 1 380px; min-width:280px;">
+            <div style="position:relative; display:flex; align-items:center; justify-content:center; min-height:clamp(220px,26vw,320px); border-radius:26px; padding:clamp(20px,3vw,40px); border:1px solid rgba(255,255,255,0.07); background:radial-gradient(ellipse 75% 72% at 50% 40%, rgba(255,255,255,0.13), rgba(255,255,255,0.02) 56%, transparent 74%), linear-gradient(160deg, rgba(62,61,65,0.5), rgba(18,18,21,0.65)); box-shadow:0 30px 60px -30px rgba(0,0,0,0.7); overflow:hidden;">
+              <div style="position:absolute; inset:0; background:radial-gradient(circle at 50% 32%, color-mix(in srgb, var(--accent,#79EDAF) 13%, transparent), transparent 60%); pointer-events:none;"></div>
+              <img src="assets/onboarding/slide5.png" alt="A diverse community of people" style="position:relative; width:auto; max-width:100%; max-height:280px; height:auto; display:block;" />
+            </div>
+          </div>
+          <div style="flex:1 1 320px; min-width:260px;">
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+              <span style="font-size:14px; font-weight:700; color:var(--accent,#79EDAF); letter-spacing:0.12em;">05</span>
+              <span style="flex:none; width:54px; height:1px; background:linear-gradient(90deg, color-mix(in srgb, var(--accent,#79EDAF) 55%, transparent), transparent);"></span>
+            </div>
+            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">Your community awaits</h3>
+            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">You're part of it now. Ask when you need a hand, give one when you can, and the community grows a little stronger every time.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <sc-if value="{{ showGallery }}" hint-placeholder-val="{{ true }}">
+    <section style="position:relative; padding:clamp(40px,6vw,72px) 0; overflow:hidden;">
+      <div style="position:absolute; inset:0; background:radial-gradient(ellipse 60% 50% at 50% 0%, color-mix(in srgb, var(--accent,#79EDAF) 9%, transparent), transparent 70%); pointer-events:none;"></div>
+      <div style="position:relative; max-width:1180px; margin:0 auto; padding:0 24px;">
+        <div data-reveal style="text-align:center; margin-bottom:40px;">
+          <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:14px;">A look inside</div>
+          <h2 style="margin:0 auto 14px; font-size:clamp(30px,4vw,46px); font-weight:700; letter-spacing:-0.03em; line-height:1.08; max-width:600px;">Native to iPhone. Simple by design.</h2>
+          <p style="margin:0 auto; font-size:15px; color:rgba(255,255,255,0.5); display:inline-flex; align-items:center; gap:9px;">Drag, scroll, or tap to explore</p>
+        </div>
+      </div>
+
+      <div data-reveal data-coverflow style="position:relative; max-width:1180px; margin:0 auto; padding:0 16px; touch-action:pan-y;">
+        <div data-cf-stage style="position:relative; height:clamp(430px,58vw,580px); perspective:1900px; cursor:grab;">
+          <sc-for list="{{ screenshots }}" as="shot" hint-placeholder-count="10">
+            <div data-cf-card data-index="{{ $index }}" role="button" tabindex="0" onClick="{{ cfCardClick }}" style="position:absolute; top:50%; left:50%; width:clamp(204px,25vw,248px); transform-style:preserve-3d; will-change:transform, opacity; transition:transform 0.55s cubic-bezier(0.22,0.61,0.36,1), opacity 0.55s ease; cursor:pointer;">
+              <img src="{{ shot }}" alt="Shok app screen" draggable="false" style="width:100%; height:auto; display:block; border-radius:12px; box-shadow:0 30px 60px -16px rgba(0,0,0,0.8); user-select:none; -webkit-user-drag:none;" />
+            </div>
+          </sc-for>
+        </div>
+
+        <button type="button" data-cf-prev onClick="{{ cfPrev }}" aria-label="Previous" style="position:absolute; top:50%; left:clamp(4px,2vw,28px); transform:translateY(-50%); z-index:200; width:48px; height:48px; border-radius:50%; border:1px solid rgba(255,255,255,0.16); background:rgba(20,19,22,0.7); backdrop-filter:blur(8px); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="background:rgba(45,43,48,0.95); border-color:rgba(255,255,255,0.3);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        </button>
+        <button type="button" data-cf-next onClick="{{ cfNext }}" aria-label="Next" style="position:absolute; top:50%; right:clamp(4px,2vw,28px); transform:translateY(-50%); z-index:200; width:48px; height:48px; border-radius:50%; border:1px solid rgba(255,255,255,0.16); background:rgba(20,19,22,0.7); backdrop-filter:blur(8px); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="background:rgba(45,43,48,0.95); border-color:rgba(255,255,255,0.3);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+        </button>
+
+        <div data-cf-dots style="display:flex; gap:8px; justify-content:center; align-items:center; margin-top:clamp(24px,3vw,36px);">
+          <sc-for list="{{ screenshots }}" as="shot" hint-placeholder-count="10">
+            <button type="button" data-cf-dot data-index="{{ $index }}" onClick="{{ cfCardClick }}" aria-label="Go to screen" style="width:8px; height:8px; padding:0; border:none; border-radius:50%; background:rgba(255,255,255,0.25); cursor:pointer; transition:width 0.35s cubic-bezier(0.22,0.61,0.36,1), background 0.35s ease;"></button>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+    </sc-if>
+
+    <!-- MISSION TEASER -->
+    <sc-if value="{{ showMissionTeaser }}" hint-placeholder-val="{{ true }}">
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(20px,4vw,48px) 24px clamp(56px,7vw,96px);">
+      <div style="position:relative; overflow:hidden; border-radius:28px; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(135deg, rgba(45,43,48,0.9), rgba(20,19,22,0.9)); padding:clamp(36px,5vw,72px);">
+        <div style="position:absolute; bottom:-140px; left:-80px; width:420px; height:420px; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb, var(--accent,#79EDAF) 16%, transparent), transparent 70%); pointer-events:none;"></div>
+        <div data-reveal style="position:relative; max-width:760px;">
+          <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:20px;">Our mission</div>
+          <p style="margin:0 0 30px; font-size:clamp(24px,3.3vw,38px); font-weight:700; line-height:1.22; letter-spacing:-0.02em; text-wrap:balance;">Rebuilding the fabric of human connection through meaningful acts of kindness.</p>
+          <button onClick="{{ goMission }}" style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.16); cursor:pointer; font-family:inherit; font-size:16px; font-weight:600; color:#fff; padding:13px 24px; border-radius:100px;" style-hover="background:rgba(255,255,255,0.13); gap:12px;">Read our mission <span>→</span></button>
+        </div>
+      </div>
+    </section>
+    </sc-if>
+
+    <!-- FINAL CTA -->
+    <section style="position:relative; overflow:hidden; border-top:1px solid rgba(255,255,255,0.07);">
+      <div style="position:absolute; inset:0; background:radial-gradient(ellipse 70% 100% at 50% 100%, color-mix(in srgb, var(--accent,#79EDAF) 13%, transparent), transparent 65%); pointer-events:none;"></div>
+      <div style="position:relative; max-width:760px; margin:0 auto; padding:clamp(64px,9vw,120px) 24px; text-align:center;">
+        <div data-reveal-group="0.1" style="display:contents;">
+        <img src="assets/app_icon.png" alt="Shok" style="width:72px; height:72px; border-radius:18px; margin-bottom:28px; box-shadow:0 18px 40px -12px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08);" />
+        <h2 style="margin:0 0 18px; font-size:clamp(32px,5vw,54px); font-weight:700; letter-spacing:-0.035em; line-height:1.05; text-wrap:balance;">Make life smoother.</h2>
+        <p style="margin:0 auto 36px; font-size:clamp(17px,1.8vw,20px); line-height:1.5; color:rgba(255,255,255,0.7); max-width:480px;">Download Shok, claim your starter credits, and join a community that shows up for each other.</p>
+        <a href="{{ appStore }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:11px; background:var(--accent,#79EDAF); color:#000; padding:16px 30px; border-radius:100px;" style-hover="opacity:0.9; transform:translateY(-1px);">
+          <svg viewBox="0 0 384 512" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
+          <span style="display:flex; flex-direction:column; line-height:1; text-align:left;"><span style="font-size:11px; font-weight:500; opacity:0.7;">Download on the</span><span style="font-size:19px; font-weight:700; margin-top:3px;">App Store</span></span>
+        </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  </sc-if>
+
+  <!-- ═══════════════════════ MISSION ═══════════════════════ -->
+  <sc-if value="{{ isMission }}" hint-placeholder-val="{{ true }}">
+  <main style="position:relative;">
+    <section style="position:relative; overflow:hidden;">
+      <div style="position:absolute; top:-120px; right:-100px; width:560px; height:560px; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb, var(--accent,#79EDAF) 16%, transparent), transparent 68%); pointer-events:none;"></div>
+      <div data-reveal-group="0.12" style="position:relative; max-width:820px; margin:0 auto; padding:clamp(56px,8vw,108px) 24px clamp(36px,5vw,56px);">
+        <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:20px;">Our Mission</div>
+        <h1 style="margin:0; font-size:clamp(34px,5.2vw,60px); font-weight:700; line-height:1.08; letter-spacing:-0.03em; text-wrap:balance;">Rebuilding the fabric of human connection through meaningful acts of kindness.</h1>
+      </div>
+    </section>
+
+    <section data-reveal-group="0.1" style="max-width:820px; margin:0 auto; padding:0 24px clamp(64px,9vw,120px); display:flex; flex-direction:column; gap:clamp(36px,4vw,52px);">
+
+      <div style="display:flex; gap:24px; align-items:flex-start;">
+        <div style="flex:none; width:40px; height:1px; background:var(--accent,#79EDAF); margin-top:18px;"></div>
+        <div>
+          <h2 style="margin:0 0 14px; font-size:clamp(22px,2.6vw,28px); font-weight:700; letter-spacing:-0.02em;">Reconnecting a disconnected world</h2>
+          <p style="margin:0; font-size:18px; line-height:1.65; color:rgba(255,255,255,0.72);">In an era where social media platforms have paradoxically made us more isolated than ever, we believe it's time for a fundamental shift. While traditional social networks encourage endless scrolling and superficial interactions, they've created a generation that's more connected to screens than to the people around them.</p>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:24px; align-items:flex-start;">
+        <div style="flex:none; width:40px; height:1px; background:var(--accent,#79EDAF); margin-top:18px;"></div>
+        <div>
+          <h2 style="margin:0 0 14px; font-size:clamp(22px,2.6vw,28px); font-weight:700; letter-spacing:-0.02em;">Real help, real connection, real community</h2>
+          <p style="margin:0; font-size:18px; line-height:1.65; color:rgba(255,255,255,0.72);">When the world feels fractured by conflict, economic strain, and widening divides, the power of genuine human connection has never been more critical. We're building an inclusive network built on trust, where every task you post and every favour you complete rekindles hope in humanity. This isn't about virtual likes or digital validation — it's about real people helping real people.</p>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:24px; align-items:flex-start;">
+        <div style="flex:none; width:40px; height:1px; background:var(--accent,#79EDAF); margin-top:18px;"></div>
+        <div>
+          <h2 style="margin:0 0 14px; font-size:clamp(22px,2.6vw,28px); font-weight:700; letter-spacing:-0.02em;">From strangers to friends through acts of kindness</h2>
+          <p style="margin:0; font-size:18px; line-height:1.65; color:rgba(255,255,255,0.72);">We believe that true friendships are forged through shared experiences and mutual support, not through comments and reactions. When someone helps you move furniture, tutors your child, or simply lends a hand when you need it most, something magical happens — barriers break down, trust is built, and genuine connections are formed.</p>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:24px; align-items:flex-start;">
+        <div style="flex:none; width:40px; height:1px; background:var(--accent,#79EDAF); margin-top:18px;"></div>
+        <div>
+          <h2 style="margin:0 0 14px; font-size:clamp(22px,2.6vw,28px); font-weight:700; letter-spacing:-0.02em;">Transforming uncertainty into solidarity</h2>
+          <p style="margin:0; font-size:18px; line-height:1.65; color:rgba(255,255,255,0.72);">Our platform creates meaningful interactions where favours come with real stakes, real rewards, and real people you can trust. Every credit spent, every task completed, and every moment of help transforms uncertainty into solidarity, one act of kindness at a time. Together, we're not just building an app — we're rebuilding the fabric of human connection.</p>
+        </div>
+      </div>
+
+      <div style="margin-top:12px; padding:32px; border-radius:20px; background:rgba(45,43,48,0.7); border:1px solid rgba(255,255,255,0.07); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px;">
+        <div style="font-size:19px; font-weight:600; max-width:380px;">Ready to be part of it?</div>
+        <a href="{{ appStore }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:10px; background:var(--accent,#79EDAF); color:#000; padding:14px 24px; border-radius:100px; font-weight:700; font-size:16px;" style-hover="opacity:0.9;">
+          <svg viewBox="0 0 384 512" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
+          Download Shok
+        </a>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <!-- ═══════════════════════ PRIVACY ═══════════════════════ -->
+  <sc-if value="{{ isPrivacy }}" hint-placeholder-val="{{ true }}">
+  <main>
+    <section style="max-width:800px; margin:0 auto; padding:clamp(56px,8vw,96px) 24px clamp(28px,4vw,40px);">
+      <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:18px;">Privacy Policy</div>
+      <h1 style="margin:0 0 24px; font-size:clamp(32px,4.6vw,52px); font-weight:700; letter-spacing:-0.03em; line-height:1.06;">Your data, handled with care.</h1>
+      <p style="margin:0 0 22px; font-size:18px; line-height:1.6; color:rgba(255,255,255,0.72); max-width:620px;">We are committed to protecting the privacy of users of our mobile application, ShokApp.</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <span style="font-size:13px; font-weight:600; padding:7px 14px; border-radius:100px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.8);">Effective 24.07.2025</span>
+        <span style="font-size:13px; font-weight:600; padding:7px 14px; border-radius:100px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.8);">Version 1.1</span>
+        <span style="font-size:13px; font-weight:600; padding:7px 14px; border-radius:100px; background:color-mix(in srgb, var(--accent,#79EDAF) 14%, transparent); color:var(--accent,#79EDAF);">GDPR compliant</span>
+      </div>
+    </section>
+
+    <section style="max-width:1080px; margin:0 auto; padding:0 24px clamp(64px,9vw,120px);">
+      <hr style="border:none; height:1px; background:rgba(255,255,255,0.1); margin:0 0 44px;" />
+      <div style="display:flex; gap:clamp(32px,5vw,64px); align-items:flex-start; flex-wrap:wrap;">
+
+        <aside style="flex:1 1 190px; min-width:180px; max-width:240px; position:sticky; top:80px; align-self:flex-start;">
+          <div style="font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.12em; color:rgba(255,255,255,0.4); margin-bottom:16px;">On this page</div>
+          <nav style="display:flex; flex-direction:column; gap:1px; border-left:1px solid rgba(255,255,255,0.12);">
+            <button data-toc-link data-target="sec-1" onClick="{{ tocClick }}" style="background:none; border:none; border-left:2px solid transparent; margin-left:-1px; cursor:pointer; font-family:inherit; text-align:left; font-size:13.5px; line-height:1.4; font-weight:500; color:rgba(255,255,255,0.55); padding:7px 0 7px 16px; transition:color 0.2s;" style-hover="color:#fff;">Introduction</button>
+            <button data-toc-link data-target="sec-2" onClick="{{ tocClick }}" style="background:none; border:none; border-left:2px solid transparent; margin-left:-1px; cursor:pointer; font-family:inherit; text-align:left; font-size:13.5px; line-height:1.4; font-weight:500; color:rgba(255,255,255,0.55); padding:7px 0 7px 16px; transition:color 0.2s;" style-hover="color:#fff;">Data we collect</button>
+            <button data-toc-link data-target="sec-3" onClick="{{ tocClick }}" style="background:none; border:none; border-left:2px solid transparent; margin-left:-1px; cursor:pointer; font-family:inherit; text-align:left; font-size:13.5px; line-height:1.4; font-weight:500; color:rgba(255,255,255,0.55); padding:7px 0 7px 16px; transition:color 0.2s;" style-hover="color:#fff;">Purpose of processing</button>
+            <button data-toc-link data-target="sec-4" onClick="{{ tocClick }}" style="background:none; border:none; border-left:2px solid transparent; margin-left:-1px; cursor:pointer; font-family:inherit; text-align:left; font-size:13.5px; line-height:1.4; font-weight:500; color:rgba(255,255,255,0.55); padding:7px 0 7px 16px; transition:color 0.2s;" style-hover="color:#fff;">Legal basis</button>
+            <button data-toc-link data-target="sec-5" onClick="{{ tocClick }}" style="background:none; border:none; border-left:2px solid transparent; margin-left:-1px; cursor:pointer; font-family:inherit; text-align:left; font-size:13.5px; line-height:1.4; font-weight:500; color:rgba(255,255,255,0.55); padding:7px 0 7px 16px; transition:color 0.2s;" style-hover="color:#fff;">Storage &amp; retention</button>
+            <button data-toc-link data-target="sec-6" onClick="{{ tocClick }}" style="background:none; border:none; border-left:2px solid transparent; margin-left:-1px; cursor:pointer; font-family:inherit; text-align:left; font-size:13.5px; line-height:1.4; font-weight:500; color:rgba(255,255,255,0.55); padding:7px 0 7px 16px; transition:color 0.2s;" style-hover="color:#fff;">Your GDPR rights</button>
+            <button data-toc-link data-target="sec-7" onClick="{{ tocClick }}" style="background:none; border:none; border-left:2px solid transparent; margin-left:-1px; cursor:pointer; font-family:inherit; text-align:left; font-size:13.5px; line-height:1.4; font-weight:500; color:rgba(255,255,255,0.55); padding:7px 0 7px 16px; transition:color 0.2s;" style-hover="color:#fff;">Children's privacy</button>
+            <button data-toc-link data-target="sec-8" onClick="{{ tocClick }}" style="background:none; border:none; border-left:2px solid transparent; margin-left:-1px; cursor:pointer; font-family:inherit; text-align:left; font-size:13.5px; line-height:1.4; font-weight:500; color:rgba(255,255,255,0.55); padding:7px 0 7px 16px; transition:color 0.2s;" style-hover="color:#fff;">Security measures</button>
+            <button data-toc-link data-target="sec-9" onClick="{{ tocClick }}" style="background:none; border:none; border-left:2px solid transparent; margin-left:-1px; cursor:pointer; font-family:inherit; text-align:left; font-size:13.5px; line-height:1.4; font-weight:500; color:rgba(255,255,255,0.55); padding:7px 0 7px 16px; transition:color 0.2s;" style-hover="color:#fff;">Policy changes</button>
+            <button data-toc-link data-target="sec-contact" onClick="{{ tocClick }}" style="background:none; border:none; border-left:2px solid transparent; margin-left:-1px; cursor:pointer; font-family:inherit; text-align:left; font-size:13.5px; line-height:1.4; font-weight:500; color:rgba(255,255,255,0.55); padding:7px 0 7px 16px; transition:color 0.2s;" style-hover="color:#fff;">Contact us</button>
+          </nav>
+        </aside>
+
+        <div style="flex:1 1 520px; min-width:0; display:flex; flex-direction:column; gap:40px;">
+
+        <div id="sec-1" data-toc-section>
+          <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; letter-spacing:-0.01em;">1. Introduction</h2>
+          <p style="margin:0 0 14px; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">We ("we," "us," or "our") are committed to protecting the privacy of users of our mobile application, ShokApp ("App"). This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our App, in compliance with the EU General Data Protection Regulation (GDPR) and App Store requirements.</p>
+          <p style="margin:0; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">By downloading or using the App, you agree to the collection and use of information in accordance with this Privacy Policy.</p>
+        </div>
+
+        <div id="sec-2" data-toc-section>
+          <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; letter-spacing:-0.01em;">2. Data we collect</h2>
+          <h3 style="margin:0 0 8px; font-size:17px; font-weight:600; color:rgba(255,255,255,0.92);">2.1 Functional data</h3>
+          <p style="margin:0 0 12px; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">We collect only the data that you knowingly provide or that is generated as part of your actions within the App, strictly for functional purposes, including:</p>
+          <ul style="margin:0 0 20px; padding-left:22px; color:rgba(255,255,255,0.7); font-size:16px; line-height:1.7;">
+            <li><strong style="color:#fff; font-weight:600;">User inputs and content</strong> (e.g., text entries, preferences, settings).</li>
+            <li><strong style="color:#fff; font-weight:600;">In-app activity data</strong> (e.g., timestamps of actions, feature usage logs).</li>
+          </ul>
+          <h3 style="margin:0 0 8px; font-size:17px; font-weight:600; color:rgba(255,255,255,0.92);">2.2 No third-party data sharing</h3>
+          <p style="margin:0; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">We do <strong style="color:var(--accent,#79EDAF); font-weight:600;">not</strong> share, sell, or disclose any of your data to third-party advertisers, analytics services, or other external parties.</p>
+        </div>
+
+        <div id="sec-3" data-toc-section>
+          <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; letter-spacing:-0.01em;">3. Purpose of processing</h2>
+          <p style="margin:0 0 12px; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">We process your data solely to:</p>
+          <ul style="margin:0; padding-left:22px; color:rgba(255,255,255,0.7); font-size:16px; line-height:1.7;">
+            <li>Provide, operate, and maintain the App's core functionality.</li>
+            <li>Improve, personalize, and enhance your user experience.</li>
+            <li>Troubleshoot and fix bugs.</li>
+          </ul>
+        </div>
+
+        <div id="sec-4" data-toc-section>
+          <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; letter-spacing:-0.01em;">4. Legal basis for processing</h2>
+          <p style="margin:0 0 12px; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">Under the GDPR, our legal bases for processing your data are:</p>
+          <ul style="margin:0; padding-left:22px; color:rgba(255,255,255,0.7); font-size:16px; line-height:1.7;">
+            <li><strong style="color:#fff; font-weight:600;">Performance of a contract:</strong> to fulfill our commitments under the App's Terms of Service.</li>
+            <li><strong style="color:#fff; font-weight:600;">Legitimate interests:</strong> to ensure the App functions as intended and to improve its performance.</li>
+          </ul>
+        </div>
+
+        <div id="sec-5" data-toc-section>
+          <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; letter-spacing:-0.01em;">5. Data storage, retention, and deletion</h2>
+          <h3 style="margin:0 0 8px; font-size:17px; font-weight:600; color:rgba(255,255,255,0.92);">5.1 Storage location</h3>
+          <p style="margin:0 0 20px; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">All data is stored securely on our private servers, housed in EU-based data centres with appropriate technical and organizational safeguards.</p>
+          <h3 style="margin:0 0 8px; font-size:17px; font-weight:600; color:rgba(255,255,255,0.92);">5.2 Account deletion &amp; data retention</h3>
+          <ul style="margin:0; padding-left:22px; color:rgba(255,255,255,0.7); font-size:16px; line-height:1.7;">
+            <li>Upon deleting your account, we retain your personal data for <strong style="color:#fff; font-weight:600;">14 days</strong> to allow for account restoration if you change your mind.</li>
+            <li>After 14 days, we permanently delete all personal data pertaining to your account.</li>
+            <li><strong style="color:#fff; font-weight:600;">Exception:</strong> Content you generated (e.g., comments, posts, notifications) is retained indefinitely to preserve the App's functionality for other users.</li>
+          </ul>
+        </div>
+
+        <div id="sec-6" data-toc-section>
+          <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; letter-spacing:-0.01em;">6. Your GDPR rights</h2>
+          <p style="margin:0 0 12px; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">Under the GDPR, you have the following rights regarding your personal data:</p>
+          <ol style="margin:0 0 14px; padding-left:22px; color:rgba(255,255,255,0.7); font-size:16px; line-height:1.7;">
+            <li><strong style="color:#fff; font-weight:600;">Right of access:</strong> obtain a copy of the data we hold about you.</li>
+            <li><strong style="color:#fff; font-weight:600;">Right to rectification:</strong> request correction of inaccurate or incomplete data.</li>
+            <li><strong style="color:#fff; font-weight:600;">Right to erasure:</strong> request deletion of your personal data (subject to the 14-day retention period above).</li>
+            <li><strong style="color:#fff; font-weight:600;">Right to restriction of processing:</strong> ask us to limit how we use your data.</li>
+            <li><strong style="color:#fff; font-weight:600;">Right to data portability:</strong> receive your data in a structured, commonly used format.</li>
+            <li><strong style="color:#fff; font-weight:600;">Right to object:</strong> object to our processing of your data under certain circumstances.</li>
+          </ol>
+          <p style="margin:0; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">To exercise any of these rights, please contact us at the address in Section 10. We will respond within one month, in accordance with GDPR.</p>
+        </div>
+
+        <div id="sec-7" data-toc-section>
+          <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; letter-spacing:-0.01em;">7. Children's privacy</h2>
+          <p style="margin:0; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">Our App is not directed to children under the age of 16. We do not knowingly collect personal data from children under 16. If you believe we have collected such data, please contact us and we will promptly delete it.</p>
+        </div>
+
+        <div id="sec-8" data-toc-section>
+          <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; letter-spacing:-0.01em;">8. Security measures</h2>
+          <p style="margin:0; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">We implement appropriate technical and organizational measures to protect your personal data, including encryption of data in transit, robust access controls on our servers, and regular security assessments to help ensure data integrity and confidentiality.</p>
+        </div>
+
+        <div id="sec-9" data-toc-section>
+          <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; letter-spacing:-0.01em;">9. Changes to this policy</h2>
+          <p style="margin:0; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">We may update this Privacy Policy from time to time. When we do, we will revise the "Effective Date" at the top. We encourage you to review this policy periodically.</p>
+        </div>
+
+        <div id="sec-contact" data-toc-section style="padding:28px; border-radius:18px; background:rgba(45,43,48,0.7); border:1px solid rgba(255,255,255,0.07);">
+          <h2 style="margin:0 0 12px; font-size:20px; font-weight:700;">Contact us</h2>
+          <p style="margin:0 0 6px; font-size:16px; line-height:1.6; color:rgba(255,255,255,0.7);">If you have any questions, requests, or concerns about this Privacy Policy or our data practices, please contact:</p>
+          <p style="margin:0 0 4px; font-size:16px; color:#fff; font-weight:600;">ShokApp</p>
+          <a href="mailto:support@shok.app" style="font-size:16px; color:var(--accent,#79EDAF); font-weight:600;">support@shok.app</a>
+          <p style="margin:14px 0 0; font-size:13px; color:rgba(255,255,255,0.45);">Last updated on 24.07.2025</p>
+        </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <!-- ─── FOOTER ─────────────────────────────────────────── -->
+  <footer style="border-top:1px solid rgba(255,255,255,0.08); background:#000;">
+    <div style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,64px) 24px; display:flex; flex-wrap:wrap; gap:40px; justify-content:space-between;">
+      <div style="max-width:320px;">
+        <div style="display:flex; align-items:center; gap:11px; margin-bottom:16px;">
+          <img src="assets/app_icon.png" alt="Shok" style="width:32px; height:32px; border-radius:9px;" />
+          <span style="font-size:19px; font-weight:700;">Shok</span>
+        </div>
+        <p style="margin:0 0 18px; font-size:15px; line-height:1.5; color:rgba(255,255,255,0.55);">Help when you need it. Have questions? We'd love to hear from you.</p>
+        <a href="mailto:support@shok.app" style="font-size:15px; color:var(--accent,#79EDAF); font-weight:600;">support@shok.app</a>
+      </div>
+      <div style="display:flex; gap:64px; flex-wrap:wrap;">
+        <div>
+          <div style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:rgba(255,255,255,0.4); margin-bottom:16px;">Pages</div>
+          <div style="display:flex; flex-direction:column; gap:11px;">
+            <button onClick="{{ goHome }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left; font-size:15px; color:rgba(255,255,255,0.75);" style-hover="color:#fff;">Home</button>
+            <button onClick="{{ goMission }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left; font-size:15px; color:rgba(255,255,255,0.75);" style-hover="color:#fff;">Our Mission</button>
+            <button onClick="{{ goPrivacy }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left; font-size:15px; color:rgba(255,255,255,0.75);" style-hover="color:#fff;">Privacy Policy</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:rgba(255,255,255,0.4); margin-bottom:16px;">Get the app</div>
+          <a href="{{ appStore }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.14); color:#fff; padding:11px 18px; border-radius:100px; font-size:14px; font-weight:600;" style-hover="background:rgba(255,255,255,0.13);">
+            <svg viewBox="0 0 384 512" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
+            App Store
+          </a>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.06);">
+      <div style="max-width:1180px; margin:0 auto; padding:20px 24px; font-size:13px; color:rgba(255,255,255,0.4);">© ShokApp 2026. All rights reserved.</div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#79EDAF&quot;,&quot;options&quot;:[&quot;#79EDAF&quot;,&quot;#FFCE2F&quot;,&quot;#75AFEF&quot;],&quot;tsType&quot;:&quot;string&quot;},&quot;showGallery&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showMissionTeaser&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { page: 'home', menuOpen: false };
+
+  go(page) {
+    return () => {
+      this.setState({ page, menuOpen: false });
+      if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'auto' });
+      this.scheduleReveals();
+    };
+  }
+
+  toggleMenu = () => this.setState(s => ({ menuOpen: !s.menuOpen }));
+
+  componentDidMount() {
+    this.maybeRedirectIOS();
+    this._reduce = typeof window !== 'undefined' && window.matchMedia
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this._cfActive = null;
+    this.scheduleReveals();
+    this.scheduleCoverflow();
+  }
+
+  maybeRedirectIOS() {
+    if (typeof navigator === 'undefined' || typeof window === 'undefined') return;
+    // Apple Smart App Banner — native iOS strip offering Open / Download.
+    // Injected here because the DC runtime strips <meta> from the template head.
+    if (typeof document !== 'undefined' && !document.querySelector('meta[name="apple-itunes-app"]')) {
+      const m = document.createElement('meta');
+      m.name = 'apple-itunes-app';
+      m.content = 'app-id=6741045477';
+      document.head.appendChild(m);
+    }
+    // iPhone / iPod only. (Modern iPadOS reports a Mac UA, and we don't want to
+    // bounce desktop visitors.) Skip anything that looks like an in-app webview
+    // or a search-engine crawler so we don't redirect bots or embedded frames.
+    const ua = navigator.userAgent || '';
+    if (!/iPhone|iPod/.test(ua)) return;
+    if (/bot|crawler|spider|bingpreview|facebookexternalhit/i.test(ua)) return;
+    // Only redirect once per browsing session, so a visitor who taps "back"
+    // from the App Store can actually read the site instead of being trapped.
+    try {
+      if (sessionStorage.getItem('shok_ios_redirected') === '1') return;
+      sessionStorage.setItem('shok_ios_redirected', '1');
+    } catch (e) { /* private mode — fall through and redirect anyway */ }
+    window.location.href = 'https://apps.apple.com/de/app/shokapp/id6741045477?l=en-GB';
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // a page swap mounts a fresh set of elements — wire + check them once laid out
+    if (!prevState || prevState.page !== this.state.page) {
+      this.scheduleReveals();
+      this.scheduleCoverflow();
+    }
+  }
+
+  componentWillUnmount() {
+    (this._revTimers || []).forEach(t => clearTimeout(t));
+    if (this._onScroll) {
+      window.removeEventListener('scroll', this._onScroll);
+      window.removeEventListener('resize', this._onScroll);
+    }
+    (this._cfTimers || []).forEach(t => clearTimeout(t));
+    if (this._cfResize) window.removeEventListener('resize', this._cfResize);
+    if (this._cfScroll) window.removeEventListener('scroll', this._cfScroll);
+    this.stopAutoplay();
+  }
+
+  // ---- Coverflow gallery ----
+  scheduleCoverflow() {
+    if (typeof window === 'undefined') return;
+    (this._cfTimers || []).forEach(t => clearTimeout(t));
+    this._cfTimers = [0, 140, 420, 900].map(d => setTimeout(() => this.setupCoverflow(), d));
+  }
+
+  setupCoverflow() {
+    const wrap = document.querySelector('[data-coverflow]');
+    if (!wrap || wrap._cfReady) { this.layoutCoverflow(); return; }
+    const stage = wrap.querySelector('[data-cf-stage]');
+    const cards = Array.from(wrap.querySelectorAll('[data-cf-card]'));
+    if (!stage || !cards.length) return;
+    wrap._cfReady = true;
+
+    const n = cards.length;
+    if (this._cfActive == null || this._cfActive >= n) this._cfActive = Math.floor((n - 1) / 2);
+    const clamp = (i) => Math.max(0, Math.min(n - 1, i));
+    this._cfGo = (i) => { this._cfActive = clamp(i); this.layoutCoverflow(); };
+
+    // Drag / swipe
+    let down = false, startX = 0, startActive = 0, moved = false;
+    const onDown = (e) => {
+      down = true; moved = false;
+      this.cfUserInteract();
+      this._cfDragging = true;
+      startX = (e.touches ? e.touches[0].clientX : e.clientX);
+      startActive = this._cfActive;
+      stage.style.cursor = 'grabbing';
+    };
+    const onMove = (e) => {
+      if (!down) return;
+      const x = (e.touches ? e.touches[0].clientX : e.clientX);
+      const dx = x - startX;
+      if (Math.abs(dx) > 6) moved = true;
+      const cardW = cards[0].offsetWidth || 220;
+      const step = cardW * 0.62;
+      this._cfActive = clamp(startActive - Math.round(dx / step));
+      this.layoutCoverflow();
+    };
+    const onUp = () => { down = false; this._cfDragging = false; stage.style.cursor = 'grab'; this.layoutCoverflow(); setTimeout(() => { stage._cfMoved = moved; }, 0); };
+    stage.addEventListener('mousedown', onDown);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    stage.addEventListener('touchstart', onDown, { passive: true });
+    stage.addEventListener('touchmove', onMove, { passive: true });
+    stage.addEventListener('touchend', onUp);
+    // suppress click-select when a drag happened
+    cards.forEach(c => c.addEventListener('click', (e) => { if (stage._cfMoved) { e.stopImmediatePropagation(); e.preventDefault(); } }, true));
+
+    // Horizontal wheel / trackpad swipe advances; vertical wheel left for page scroll
+    let wheelCooldown = 0;
+    stage.addEventListener('wheel', (e) => {
+      const horiz = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+      if (!horiz) return;
+      e.preventDefault();
+      this.cfUserInteract();
+      const now = Date.now();
+      if (now < wheelCooldown) return;
+      wheelCooldown = now + 220;
+      this._cfGo(this._cfActive + (e.deltaX > 0 ? 1 : -1));
+    }, { passive: false });
+
+    // Keyboard arrows when focused
+    stage.setAttribute('tabindex', '0');
+    stage.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); this.cfUserInteract(); this._cfGo(this._cfActive - 1); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); this.cfUserInteract(); this._cfGo(this._cfActive + 1); }
+    });
+
+    if (!this._cfResize) {
+      this._cfResize = () => this.layoutCoverflow();
+      window.addEventListener('resize', this._cfResize, { passive: true });
+    }
+    if (!this._cfScroll) {
+      this._cfScroll = () => this.maybeAutoplay();
+      window.addEventListener('scroll', this._cfScroll, { passive: true });
+    }
+    this.layoutCoverflow();
+    this.maybeAutoplay();
+  }
+
+  // Start auto-advance only while the gallery is on screen and the user hasn't
+  // taken control. Ping-pongs end-to-end so there's never a jarring wrap jump.
+  maybeAutoplay() {
+    if (this._cfUserInteracted) return;
+    const wrap = document.querySelector('[data-coverflow]');
+    if (!wrap) { this.stopAutoplay(); return; }
+    const r = wrap.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    const inView = r.top < vh * 0.82 && r.bottom > vh * 0.18;
+    if (inView) this.startAutoplay(); else this.stopAutoplay();
+  }
+
+  startAutoplay() {
+    if (this._cfUserInteracted || this._cfAuto) return;
+    this._cfDir = this._cfDir || 1;
+    this._cfAuto = setInterval(() => {
+      if (this._cfUserInteracted) { this.stopAutoplay(); return; }
+      if (typeof document !== 'undefined' && document.hidden) return;
+      const wrap = document.querySelector('[data-coverflow]');
+      const cards = wrap && wrap.querySelectorAll('[data-cf-card]');
+      if (!cards || !cards.length) return;
+      const n = cards.length;
+      let next = (this._cfActive || 0) + this._cfDir;
+      if (next > n - 1) { next = n - 2; this._cfDir = -1; }
+      else if (next < 0) { next = 1; this._cfDir = 1; }
+      this._cfActive = Math.max(0, Math.min(n - 1, next));
+      this.layoutCoverflow();
+    }, 2600);
+  }
+
+  stopAutoplay() {
+    if (this._cfAuto) { clearInterval(this._cfAuto); this._cfAuto = null; }
+  }
+
+  // Hard interaction → hand control to the user and never auto-scroll again.
+  cfUserInteract() {
+    this._cfUserInteracted = true;
+    this.stopAutoplay();
+  }
+
+  layoutCoverflow() {
+    const wrap = document.querySelector('[data-coverflow]');
+    if (!wrap) return;
+    const cards = Array.from(wrap.querySelectorAll('[data-cf-card]'));
+    const dots = Array.from(wrap.querySelectorAll('[data-cf-dot]'));
+    if (!cards.length) return;
+    const active = this._cfActive || 0;
+    const cardW = cards[0].offsetWidth || 220;
+    const spacing = cardW * 0.66;
+    const accent = (this.props && this.props.accentColor) || '#79EDAF';
+    // The wheel's motion lives in this transition. It's applied on every layout
+    // EXCEPT the very first (cards snap into place) and while actively dragging
+    // (cards must track the finger 1:1). Setting transition + transform together
+    // each call animates from the previously-painted position.
+    const TRANS = 'transform 0.62s cubic-bezier(0.33,1,0.68,1), opacity 0.5s ease';
+    const animate = this._cfLaidOut && !this._cfDragging;
+
+    cards.forEach((card, i) => {
+      const off = i - active;
+      const a = Math.abs(off);
+      const sign = Math.sign(off);
+      // distant cards compress toward the edge instead of flying off
+      const x = sign * (spacing * Math.min(a, 1) + spacing * 0.52 * Math.max(0, a - 1));
+      const rotate = Math.max(-52, Math.min(52, -off * 40));
+      const tz = -a * 130;
+      const scale = Math.max(0.6, 1 - a * 0.14);
+      const visible = a <= 3;
+      card.style.transition = animate ? TRANS : 'none';
+      card.style.transform =
+        'translate(-50%,-50%) translateX(' + x + 'px) translateZ(' + tz + 'px) rotateY(' + rotate + 'deg) scale(' + scale + ')';
+      card.style.zIndex = String(100 - a);
+      card.style.opacity = visible ? String(Math.max(0.18, 1 - a * 0.22)) : '0';
+      card.style.pointerEvents = visible ? 'auto' : 'none';
+      const img = card.querySelector('img');
+      if (img) {
+        img.style.boxShadow = a === 0
+          ? '0 40px 80px -16px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.08)'
+          : '0 30px 60px -20px rgba(0,0,0,0.8)';
+        img.style.filter = a === 0 ? 'none' : 'brightness(0.62) saturate(0.9)';
+      }
+    });
+
+    this._cfLaidOut = true;
+
+    dots.forEach((dot, i) => {
+      const on = i === active;
+      dot.style.width = on ? '24px' : '8px';
+      dot.style.borderRadius = on ? '4px' : '50%';
+      dot.style.background = on ? accent : 'rgba(255,255,255,0.25)';
+    });
+  }
+
+  scheduleReveals() {
+    if (typeof window === 'undefined') return;
+    (this._revTimers || []).forEach(t => clearTimeout(t));
+    // retry a few times so elements that stream in late still get wired
+    this._revTimers = [0, 120, 360, 800].map(d => setTimeout(() => this.setupReveals(), d));
+  }
+
+  setupReveals() {
+    if (typeof document === 'undefined') return;
+
+    // Walkthrough steps → staggered child reveals (illustration first, copy after)
+    const walk = document.querySelector('[data-walk]');
+    if (walk) {
+      Array.from(walk.children).forEach(step => {
+        Array.from(step.children).forEach((kid, i) => {
+          if (!kid.hasAttribute('data-reveal')) {
+            kid.setAttribute('data-reveal', '');
+            kid.setAttribute('data-reveal-delay', String(i * 0.1));
+            kid.setAttribute('data-reveal-rise', i === 0 ? '46' : '30');
+          }
+        });
+      });
+    }
+
+    // Stagger groups → each direct child reveals in sequence
+    document.querySelectorAll('[data-reveal-group]:not([data-rg-init])').forEach(group => {
+      group.setAttribute('data-rg-init', '1');
+      const step = parseFloat(group.getAttribute('data-reveal-group')) || 0.09;
+      Array.from(group.children).forEach((kid, i) => {
+        if (!kid.hasAttribute('data-reveal')) {
+          kid.setAttribute('data-reveal', '');
+          kid.setAttribute('data-reveal-delay', String(i * step));
+        }
+      });
+    });
+
+    const fresh = Array.from(document.querySelectorAll('[data-reveal]:not([data-reveal-init])'));
+    fresh.forEach(el => {
+      el.setAttribute('data-reveal-init', '1');
+      const delay = parseFloat(el.getAttribute('data-reveal-delay') || '0');
+      const rise = el.getAttribute('data-reveal-rise') || '28';
+      const x = el.getAttribute('data-reveal-x') || '0';
+      const scale = el.getAttribute('data-reveal-scale');
+      const from = 'translate(' + x + 'px,' + rise + 'px)' + (scale ? ' scale(' + scale + ')' : '');
+      el._revFrom = from;
+      el._revTransition =
+        'opacity 0.72s cubic-bezier(0.22,0.61,0.36,1) ' + delay + 's, ' +
+        'transform 0.82s cubic-bezier(0.22,0.61,0.36,1) ' + delay + 's';
+      el._revShown = false;
+      if (this._reduce) { el.style.opacity = '1'; return; }
+      // Hide with NO transition so the hidden state commits cleanly on the
+      // reflow below; the real transition is attached at reveal time, so the
+      // 0→1 change animates instead of getting collapsed/stuck at 0.
+      el.style.transition = 'none';
+      el.style.opacity = '0';
+      el.style.transform = from;
+      el.style.willChange = 'opacity, transform';
+      (this._revEls = this._revEls || []).push(el);
+    });
+
+    if (this._reduce) return;
+
+    if (!this._onScroll) {
+      this._onScroll = () => {
+        this.updateToc();
+        if (this._raf) return;
+        this._raf = requestAnimationFrame(() => { this._raf = null; this.revealCheck(); });
+      };
+      window.addEventListener('scroll', this._onScroll, { passive: true });
+      window.addEventListener('resize', this._onScroll, { passive: true });
+    }
+    // run now, and again on the next two frames so freshly-mounted pages
+    // (whose layout settles after commit) reveal without needing a scroll
+    // The hidden state (opacity:0) must paint for at least one frame before we
+    // flip in-view elements to opacity:1 — otherwise the 0→1 transition is
+    // collapsed in the same tick and the node sticks at 0. So force a reflow,
+    // then defer the first reveal to the next frame. updateToc has no
+    // transition, so it can run immediately.
+    if (fresh.length) void document.documentElement.offsetHeight;
+    this.updateToc();
+    const run = () => { this.revealCheck(); this.updateToc(); };
+    // Reveal only AFTER the hidden state has painted at least once. rAF
+    // callbacks run *before* paint, so a single rAF reveals too early and the
+    // 0→1 transition collapses (node sticks at 0). Double-rAF guarantees a
+    // paint happens between the hide and the reveal.
+    requestAnimationFrame(() => requestAnimationFrame(run));
+    // fallbacks for environments that throttle rAF
+    setTimeout(run, 80);
+    setTimeout(run, 260);
+  }
+
+  updateToc() {
+    const links = document.querySelectorAll('[data-toc-link]');
+    if (!links.length) return;
+    let activeId = null;
+    document.querySelectorAll('[data-toc-section]').forEach(sec => {
+      if (sec.getBoundingClientRect().top <= 140) activeId = sec.id;
+    });
+    if (!activeId) { const f = document.querySelector('[data-toc-section]'); activeId = f && f.id; }
+    links.forEach(a => {
+      const on = a.getAttribute('data-target') === activeId;
+      a.style.color = on ? 'var(--accent,#79EDAF)' : 'rgba(255,255,255,0.55)';
+      a.style.borderLeftColor = on ? 'var(--accent,#79EDAF)' : 'transparent';
+      a.style.fontWeight = on ? '600' : '500';
+    });
+  }
+
+  revealCheck() {
+    if (this._reduce) return;
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    this._revEls = (this._revEls || []).filter(el => el.isConnected);
+    this._revEls.forEach(el => {
+      const r = el.getBoundingClientRect();
+      const inView = r.top < vh * 0.86 && r.bottom > vh * 0.1;
+      const fullyOut = r.bottom < -60 || r.top > vh + 60;
+      if (inView && !el._revShown) {
+        el._revShown = true;
+        el.style.transition = el._revTransition;
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        // Safety net: if the transition clock is paused (offscreen/throttled
+        // renderers), the node can stall mid-fade at opacity 0. After the
+        // animation should have finished, commit the visible end-state. In a
+        // real browser the fade has already completed, so this is a no-op.
+        clearTimeout(el._revSafety);
+        const ms = (parseFloat(el.getAttribute('data-reveal-delay') || '0') + 0.82) * 1000 + 120;
+        el._revSafety = setTimeout(() => {
+          // Must drop the transition: a frozen clock keeps the *computed*
+          // opacity at 0 even with inline 1, so only removing the animation
+          // forces the value to commit. In a real browser the fade has long
+          // since finished, so this is visually a no-op.
+          if (el._revShown) {
+            el.style.transition = 'none';
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+          }
+        }, ms);
+      } else if (fullyOut && el._revShown) {
+        // reset so it replays the next time it scrolls back into view
+        el._revShown = false;
+        el.style.transition = el._revTransition;
+        el.style.opacity = '0';
+        el.style.transform = el._revFrom;
+      }
+    });
+  }
+
+  renderVals() {
+    const page = this.state.page;
+    return {
+      accent: this.props.accentColor ?? '#79EDAF',
+      appStore: 'https://apps.apple.com/de/app/shokapp/id6741045477?l=en-GB',
+      isHome: page === 'home',
+      isMission: page === 'mission',
+      isPrivacy: page === 'privacy',
+      goHome: this.go('home'),
+      goMission: this.go('mission'),
+      goPrivacy: this.go('privacy'),
+      menuOpen: this.state.menuOpen,
+      menuOpenClass: this.state.menuOpen ? 'open' : '',
+      toggleMenu: this.toggleMenu,
+      cfPrev: () => { this.cfUserInteract(); this._cfGo && this._cfGo((this._cfActive || 0) - 1); },
+      cfNext: () => { this.cfUserInteract(); this._cfGo && this._cfGo((this._cfActive || 0) + 1); },
+      cfCardClick: (e) => {
+        this.cfUserInteract();
+        const i = parseInt(e.currentTarget.getAttribute('data-index'), 10);
+        if (!isNaN(i) && this._cfGo) this._cfGo(i);
+      },
+      tocClick: (e) => {
+        const id = e.currentTarget.getAttribute('data-target');
+        const el = document.getElementById(id);
+        if (!el) return;
+        const se = document.scrollingElement || document.documentElement;
+        const start = se.scrollTop;
+        const target = el.getBoundingClientRect().top + start - 88;
+        const dist = target - start;
+        const dur = 480, t0 = performance.now();
+        const ease = p => 1 - Math.pow(1 - p, 3);
+        const step = (now) => {
+          const p = Math.min(1, (now - t0) / dur);
+          se.scrollTop = start + dist * ease(p);
+          this.updateToc();
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+        // safety net: guarantee final position + active state even if rAF is throttled
+        setTimeout(() => { se.scrollTop = target; this.updateToc(); }, dur + 60);
+      },
+      screenshots: Array.from({length:10}, (_,i)=>`https://shok.app/images/screenshot_${i+1}.jpeg`),
+      showGallery: this.props.showGallery ?? true,
+      showMissionTeaser: this.props.showMissionTeaser ?? true,
+    };
+  }
+}
+</script>
+</body>
+</html>

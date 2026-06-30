@@ -1,0 +1,186 @@
+{
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "rules": {
+    "react/forbid-elements": [
+      "warn",
+      {
+        "forbid": []
+      }
+    ],
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": [
+          {
+            "group": [
+              "ui_kits/ios_app/**"
+            ],
+            "message": "Import design-system components from 'index.js', not component internals."
+          }
+        ]
+      }
+    ],
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var()."
+      },
+      {
+        "selector": "Literal[value=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a design-system spacing token via var()."
+      },
+      {
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:DM Sans))/i]",
+        "message": "Font not provided by the design system. Available: DM Sans."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/index.js"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ],
+  "x-omelette": {
+    "components": {},
+    "tokens": [
+      "--color-accent-blue",
+      "--color-accent-blue-muted",
+      "--color-app-bg",
+      "--color-border-subtle",
+      "--color-btn-gray-bg",
+      "--color-btn-gray-bg-pressed",
+      "--color-card-bg",
+      "--color-card-bg-solid",
+      "--color-dimmed-overlay",
+      "--color-elevated-surface",
+      "--color-elevated-surface-solid",
+      "--color-error-red",
+      "--color-error-red-subtle",
+      "--color-highlight-bg",
+      "--color-overlay-medium",
+      "--color-primary-green",
+      "--color-primary-green-muted",
+      "--color-primary-green-subtle",
+      "--color-primary-yellow",
+      "--color-shimmer-highlight",
+      "--color-text-disabled",
+      "--color-text-muted",
+      "--color-text-on-accent",
+      "--color-text-primary",
+      "--color-text-quaternary",
+      "--color-text-secondary",
+      "--color-text-subtle",
+      "--color-text-tertiary",
+      "--font-body",
+      "--font-display",
+      "--font-system",
+      "--font-utility",
+      "--leading-normal",
+      "--leading-relaxed",
+      "--leading-tight",
+      "--radius-avatar-lg",
+      "--radius-avatar-sm",
+      "--radius-btn",
+      "--radius-bubble-lg",
+      "--radius-bubble-sm",
+      "--radius-card",
+      "--radius-input",
+      "--radius-pill",
+      "--shadow-card",
+      "--shadow-sm",
+      "--space-1",
+      "--space-2",
+      "--space-3",
+      "--space-4",
+      "--space-5",
+      "--space-6",
+      "--text-action",
+      "--text-body",
+      "--text-caption",
+      "--text-meta",
+      "--text-name",
+      "--text-nav-title",
+      "--text-timestamp",
+      "--weight-bold",
+      "--weight-medium",
+      "--weight-regular",
+      "--weight-semibold"
+    ],
+    "tokenKinds": {
+      "--color-primary-green": "color",
+      "--color-primary-green-muted": "color",
+      "--color-primary-green-subtle": "color",
+      "--color-primary-yellow": "color",
+      "--color-accent-blue": "color",
+      "--color-accent-blue-muted": "color",
+      "--color-error-red": "color",
+      "--color-error-red-subtle": "color",
+      "--color-app-bg": "color",
+      "--color-card-bg": "color",
+      "--color-card-bg-solid": "color",
+      "--color-elevated-surface": "color",
+      "--color-elevated-surface-solid": "color",
+      "--color-highlight-bg": "color",
+      "--color-overlay-medium": "color",
+      "--color-dimmed-overlay": "color",
+      "--color-shimmer-highlight": "color",
+      "--color-text-primary": "font",
+      "--color-text-secondary": "font",
+      "--color-text-tertiary": "font",
+      "--color-text-quaternary": "font",
+      "--color-text-muted": "font",
+      "--color-text-subtle": "font",
+      "--color-text-disabled": "font",
+      "--color-text-on-accent": "font",
+      "--color-border-subtle": "color",
+      "--color-btn-gray-bg": "color",
+      "--color-btn-gray-bg-pressed": "color",
+      "--shadow-card": "shadow",
+      "--shadow-sm": "shadow",
+      "--font-display": "font",
+      "--font-body": "font",
+      "--font-utility": "font",
+      "--font-system": "font",
+      "--text-nav-title": "font",
+      "--text-name": "font",
+      "--text-body": "font",
+      "--text-action": "font",
+      "--text-meta": "font",
+      "--text-caption": "font",
+      "--text-timestamp": "font",
+      "--weight-bold": "font",
+      "--weight-semibold": "font",
+      "--weight-medium": "font",
+      "--weight-regular": "font",
+      "--leading-tight": "font",
+      "--leading-normal": "font",
+      "--leading-relaxed": "font",
+      "--space-1": "spacing",
+      "--space-2": "spacing",
+      "--space-3": "spacing",
+      "--space-4": "spacing",
+      "--space-5": "spacing",
+      "--space-6": "spacing",
+      "--radius-card": "radius",
+      "--radius-bubble-lg": "radius",
+      "--radius-bubble-sm": "radius",
+      "--radius-btn": "radius",
+      "--radius-input": "radius",
+      "--radius-avatar-sm": "radius",
+      "--radius-avatar-lg": "radius",
+      "--radius-pill": "radius"
+    },
+    "fontFamilies": [
+      "DM Sans"
+    ]
+  }
+}
