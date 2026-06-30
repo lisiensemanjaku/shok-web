@@ -107,7 +107,7 @@
       <div data-reveal data-reveal-rise="0" data-reveal-scale="0.93" style="position:relative; z-index:1; flex:1 1 300px; display:flex; justify-content:center; min-width:280px;">
         <div style="position:relative; width:min(300px,78vw); animation:shokFloat 7s ease-in-out infinite;">
           <div style="position:absolute; inset:-3% -8%; border-radius:52px; background:radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--accent,#79EDAF) 30%, transparent), transparent 70%); filter:blur(28px); z-index:0;"></div>
-          <img src="https://shok.app/images/screenshot_1.jpeg" alt="Shok app feed" style="position:relative; z-index:1; width:100%; height:auto; display:block; border-radius:6px; filter:drop-shadow(0 40px 80px rgba(0,0,0,0.85));" />
+          <img src="images/screenshot_1.jpeg" alt="Shok app feed" decoding="async" style="position:relative; z-index:1; width:100%; height:auto; display:block; border-radius:6px; filter:drop-shadow(0 40px 80px rgba(0,0,0,0.85));" />
         </div>
       </div>
     </section>
@@ -247,7 +247,7 @@
         <div data-cf-stage style="position:relative; height:clamp(430px,58vw,580px); perspective:1900px; cursor:grab;">
           <sc-for list="{{ screenshots }}" as="shot" hint-placeholder-count="10">
             <div data-cf-card data-index="{{ $index }}" role="button" tabindex="0" onClick="{{ cfCardClick }}" style="position:absolute; top:50%; left:50%; width:clamp(204px,25vw,248px); transform-style:preserve-3d; will-change:transform, opacity; transition:transform 0.55s cubic-bezier(0.22,0.61,0.36,1), opacity 0.55s ease; cursor:pointer;">
-              <img src="{{ shot }}" alt="Shok app screen" draggable="false" style="width:100%; height:auto; display:block; border-radius:12px; box-shadow:0 30px 60px -16px rgba(0,0,0,0.8); user-select:none; -webkit-user-drag:none;" />
+              <img src="{{ shot }}" alt="Shok app screen" draggable="false" loading="lazy" decoding="async" style="width:100%; height:auto; display:block; border-radius:12px; box-shadow:0 30px 60px -16px rgba(0,0,0,0.8); user-select:none; -webkit-user-drag:none;" />
             </div>
           </sc-for>
         </div>
@@ -951,7 +951,7 @@ class Component extends DCLogic {
         // safety net: guarantee final position + active state even if rAF is throttled
         setTimeout(() => { se.scrollTop = target; this.updateToc(); }, dur + 60);
       },
-      screenshots: Array.from({length:10}, (_,i)=>`https://shok.app/images/screenshot_${i+1}.jpeg`),
+      screenshots: Array.from({length:10}, (_,i)=>`images/screenshot_${i+1}.jpeg`),
       showGallery: this.props.showGallery ?? true,
       showMissionTeaser: this.props.showMissionTeaser ?? true,
     };
