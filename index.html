@@ -614,26 +614,37 @@ class Component extends DCLogic {
     this._cfGo = (i) => { this._cfActive = clamp(i); this.layoutCoverflow(); };
 
     // Drag / swipe
-    let down = false, startX = 0, startActive = 0, moved = false;
+    let down = false, startX = 0, lastX = 0, startActive = 0, moved = false, isTouch = false;
+    const stepFor = () => (cards[0].offsetWidth || 220) * 0.62;
     const onDown = (e) => {
       down = true; moved = false;
+      isTouch = !!e.touches;
       this.cfUserInteract();
       this._cfDragging = true;
-      startX = (e.touches ? e.touches[0].clientX : e.clientX);
+      startX = lastX = (e.touches ? e.touches[0].clientX : e.clientX);
       startActive = this._cfActive;
       stage.style.cursor = 'grabbing';
     };
     const onMove = (e) => {
       if (!down) return;
       const x = (e.touches ? e.touches[0].clientX : e.clientX);
+      lastX = x;
       const dx = x - startX;
       if (Math.abs(dx) > 6) moved = true;
-      const cardW = cards[0].offsetWidth || 220;
-      const step = cardW * 0.62;
-      this._cfActive = clamp(startActive - Math.round(dx / step));
+      // Touch swipes are fast flicks: tracking the finger 1:1 here would snap
+      // straight to the destination and leave nothing to animate. Defer the move
+      // to release (onUp) so the wheel plays one clean spin, like the buttons.
+      // Mouse drag stays live so it can scrub through cards.
+      if (isTouch) return;
+      this._cfActive = clamp(startActive - Math.round(dx / stepFor()));
       this.layoutCoverflow();
     };
-    const onUp = () => { down = false; this._cfDragging = false; stage.style.cursor = 'grab'; this.layoutCoverflow(); setTimeout(() => { stage._cfMoved = moved; }, 0); };
+    const onUp = () => {
+      down = false; this._cfDragging = false; stage.style.cursor = 'grab';
+      if (isTouch) this._cfActive = clamp(startActive - Math.round((lastX - startX) / stepFor()));
+      this.layoutCoverflow();
+      setTimeout(() => { stage._cfMoved = moved; }, 0);
+    };
     stage.addEventListener('mousedown', onDown);
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
