@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Shok</title>
+<meta name="apple-itunes-app" content="app-id=6741045477">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
@@ -640,6 +641,10 @@ class Component extends DCLogic {
       this.layoutCoverflow();
     };
     const onUp = () => {
+      // Only settle a gesture we actually started. onUp is bound to the global
+      // mouseup, so without this guard every click (e.g. the prev/next buttons)
+      // would re-run the touch-settle below with stale coords and fight them.
+      if (!down) return;
       down = false; this._cfDragging = false; stage.style.cursor = 'grab';
       if (isTouch) this._cfActive = clamp(startActive - Math.round((lastX - startX) / stepFor()));
       this.layoutCoverflow();
