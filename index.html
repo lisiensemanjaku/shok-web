@@ -651,6 +651,9 @@ class Component extends DCLogic {
     stage.addEventListener('touchstart', onDown, { passive: true });
     stage.addEventListener('touchmove', onMove, { passive: true });
     stage.addEventListener('touchend', onUp);
+    // If the browser hijacks the gesture for scrolling it fires touchcancel, not
+    // touchend — settle (and animate) the swipe anyway so it isn't dropped.
+    stage.addEventListener('touchcancel', onUp);
     // suppress click-select when a drag happened
     cards.forEach(c => c.addEventListener('click', (e) => { if (stage._cfMoved) { e.stopImmediatePropagation(); e.preventDefault(); } }, true));
 
