@@ -8,6 +8,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<script src="./translations.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -38,6 +39,7 @@
     header nav>div>button:not([data-menu-btn]){display:none !important;}
     header nav>div>a{margin-left:0 !important;}
     [data-menu-btn]{display:inline-flex !important;}
+    header nav>div>div>button[data-lang-btn]{display:inline-flex !important;}
     /* Slide-down panel */
     .menupanel{display:block;overflow:hidden;max-height:0;border-top:0 solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:0 14px;transition:max-height 0.34s cubic-bezier(0.4,0,0.2,1),padding 0.34s ease;}
     .menupanel.open{max-height:240px;padding:8px 14px 16px;border-top-width:1px;}
@@ -66,23 +68,46 @@
         <span style="font-size:21px; font-weight:700; color:#fff; letter-spacing:-0.02em;">Shok</span>
       </button>
       <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-        <button onClick="{{ goHome }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:rgba(255,255,255,0.85); padding:8px 14px; border-radius:100px;" style-hover="background:rgba(255,255,255,0.06); color:#fff;">Home</button>
-        <button onClick="{{ goMission }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:rgba(255,255,255,0.85); padding:8px 14px; border-radius:100px;" style-hover="background:rgba(255,255,255,0.06); color:#fff;">Our Mission</button>
-        <button onClick="{{ goPrivacy }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:rgba(255,255,255,0.85); padding:8px 14px; border-radius:100px;" style-hover="background:rgba(255,255,255,0.06); color:#fff;">Privacy</button>
+        <button onClick="{{ goHome }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:rgba(255,255,255,0.85); padding:8px 14px; border-radius:100px;" style-hover="background:rgba(255,255,255,0.06); color:#fff;">{{ t.nav_home }}</button>
+        <button onClick="{{ goMission }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:rgba(255,255,255,0.85); padding:8px 14px; border-radius:100px;" style-hover="background:rgba(255,255,255,0.06); color:#fff;">{{ t.nav_mission }}</button>
+        <button onClick="{{ goPrivacy }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:rgba(255,255,255,0.85); padding:8px 14px; border-radius:100px;" style-hover="background:rgba(255,255,255,0.06); color:#fff;">{{ t.nav_privacy }}</button>
         <a href="{{ appStore }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; background:var(--accent,#79EDAF); color:#000; font-weight:600; font-size:14px; padding:9px 18px; border-radius:100px; margin-left:6px;" style-hover="opacity:0.88;">
           <svg viewBox="0 0 384 512" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
-          Get the app
+          {{ t.nav_getapp }}
         </a>
+        <div style="position:relative;">
+          <button data-lang-btn onClick="{{ toggleLangMenu }}" aria-label="Change language" style="display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); cursor:pointer; font-family:inherit; font-size:13px; font-weight:600; color:#fff; padding:8px 12px; border-radius:100px;" style-hover="background:rgba(255,255,255,0.12);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span>{{ currentLangCode }}</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+        </div>
         <button data-menu-btn onClick="{{ toggleMenu }}" aria-label="Menu" style="display:none; align-items:center; justify-content:center; width:42px; height:42px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:11px; cursor:pointer; color:#fff; padding:0;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
         </button>
       </div>
     </nav>
     <div data-menu-panel class="menupanel {{ menuOpenClass }}">
-      <button onClick="{{ goHome }}" class="menulink">Home</button>
-      <button onClick="{{ goMission }}" class="menulink">Our Mission</button>
-      <button onClick="{{ goPrivacy }}" class="menulink">Privacy</button>
+      <button onClick="{{ goHome }}" class="menulink">{{ t.nav_home }}</button>
+      <button onClick="{{ goMission }}" class="menulink">{{ t.nav_mission }}</button>
+      <button onClick="{{ goPrivacy }}" class="menulink">{{ t.nav_privacy }}</button>
     </div>
+    <sc-if value="{{ langMenuOpen }}">
+    <div onClick="{{ closeLangMenu }}" style="position:fixed; inset:0; z-index:998; background:transparent;"></div>
+    <div role="listbox" aria-label="Select language" style="position:fixed; top:64px; right:16px; z-index:999; width:min(300px,92vw); max-height:min(480px,70vh); overflow-y:auto; background:rgba(20,19,22,0.97); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:8px; box-shadow:0 30px 60px -20px rgba(0,0,0,0.8);">
+      <sc-for list="{{ languages }}" as="lng" hint-placeholder-count="14">
+        <button type="button" data-code="{{ lng.code }}" onClick="{{ selectLangClick }}" style="display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; background:none; border:none; cursor:pointer; font-family:inherit; text-align:left; padding:11px 12px; border-radius:10px; color:#fff;" style-hover="background:rgba(255,255,255,0.08);">
+          <span style="display:flex; flex-direction:column; align-items:flex-start; gap:1px;">
+            <span style="font-size:14.5px; font-weight:600;">{{ lng.native }}</span>
+            <span style="font-size:12px; color:rgba(255,255,255,0.5);">{{ lng.label }}</span>
+          </span>
+          <sc-if value="{{ lng.code === lang }}" hint-placeholder-val="{{ false }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent,#79EDAF)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+          </sc-if>
+        </button>
+      </sc-for>
+    </div>
+    </sc-if>
   </header>
 
   <!-- ═══════════════════════ HOME ═══════════════════════ -->
@@ -96,23 +121,23 @@
       <div data-reveal-group="0.1" style="position:relative; z-index:1; flex:1 1 420px; min-width:300px;">
         <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border:1px solid rgba(255,255,255,0.14); border-radius:100px; background:rgba(255,255,255,0.03); margin-bottom:26px;">
           <span style="width:7px; height:7px; border-radius:50%; background:var(--accent,#79EDAF); box-shadow:0 0 10px var(--accent,#79EDAF);"></span>
-          <span style="font-size:13px; font-weight:500; color:rgba(255,255,255,0.7);">Free to join · iOS · community-powered</span>
+          <span style="font-size:13px; font-weight:500; color:rgba(255,255,255,0.7);">{{ t.hero_badge }}</span>
         </div>
-        <h1 style="margin:0 0 22px; font-size:clamp(44px,6.4vw,78px); line-height:1.02; font-weight:700; letter-spacing:-0.035em; text-wrap:balance;">Help when<br>you need it.</h1>
-        <p style="margin:0 0 36px; font-size:clamp(17px,1.7vw,21px); line-height:1.5; color:rgba(255,255,255,0.7); max-width:480px;">Ask for support or lend your talents, earn credits, and connect with peers who've always got your back.</p>
+        <h1 style="margin:0 0 22px; font-size:clamp(44px,6.4vw,78px); line-height:1.02; font-weight:700; letter-spacing:-0.035em; text-wrap:balance;">{{ t.hero_h1_line1 }}<br>{{ t.hero_h1_line2 }}</h1>
+        <p style="margin:0 0 36px; font-size:clamp(17px,1.7vw,21px); line-height:1.5; color:rgba(255,255,255,0.7); max-width:480px;">{{ t.hero_p }}</p>
         <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
           <a href="{{ appStore }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:11px; background:var(--accent,#79EDAF); color:#000; padding:15px 26px; border-radius:100px;" style-hover="opacity:0.9; transform:translateY(-1px);">
             <svg viewBox="0 0 384 512" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
-            <span style="display:flex; flex-direction:column; line-height:1; text-align:left;"><span style="font-size:11px; font-weight:500; opacity:0.7;">Download on the</span><span style="font-size:18px; font-weight:700; margin-top:3px;">App Store</span></span>
+            <span style="display:flex; flex-direction:column; line-height:1; text-align:left;"><span style="font-size:11px; font-weight:500; opacity:0.7;">{{ t.appstore_small }}</span><span style="font-size:18px; font-weight:700; margin-top:3px;">{{ t.appstore_big }}</span></span>
           </a>
-          <button onClick="{{ goMission }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:16px; font-weight:600; color:#fff; padding:14px 8px; display:inline-flex; align-items:center; gap:7px;" style-hover="gap:11px; color:var(--accent,#79EDAF);">Why we built this <span style="font-size:18px;">→</span></button>
+          <button onClick="{{ goMission }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:16px; font-weight:600; color:#fff; padding:14px 8px; display:inline-flex; align-items:center; gap:7px;" style-hover="gap:11px; color:var(--accent,#79EDAF);">{{ t.hero_why }} <span style="font-size:18px;">→</span></button>
         </div>
       </div>
 
       <div data-reveal data-reveal-rise="0" data-reveal-scale="0.93" style="position:relative; z-index:1; flex:1 1 300px; display:flex; justify-content:center; min-width:280px;">
         <div style="position:relative; width:min(300px,78vw); animation:shokFloat 7s ease-in-out infinite;">
           <div style="position:absolute; inset:-3% -8%; border-radius:52px; background:radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--accent,#79EDAF) 30%, transparent), transparent 70%); filter:blur(28px); z-index:0;"></div>
-          <img src="images/screenshot_1.jpeg" alt="Shok app feed" decoding="async" style="position:relative; z-index:1; width:100%; height:auto; display:block; border-radius:6px; filter:drop-shadow(0 40px 80px rgba(0,0,0,0.85));" />
+          <img data-hero-img src="{{ screenshots.0 }}" alt="Shok app screen" decoding="async" style="position:relative; z-index:1; width:100%; height:auto; display:block; border-radius:6px; filter:drop-shadow(0 40px 80px rgba(0,0,0,0.85));" />
         </div>
       </div>
     </section>
@@ -122,15 +147,15 @@
       <div data-reveal-group="0.12" style="display:flex; flex-wrap:wrap; gap:14px;">
         <div style="flex:1 1 200px; background:rgba(45,43,48,0.55); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:18px 22px;">
           <div style="font-size:26px; font-weight:700; color:var(--accent,#79EDAF); letter-spacing:-0.02em;">100</div>
-          <div style="font-size:14px; color:rgba(255,255,255,0.6); margin-top:4px;">starter credits on sign-up</div>
+          <div style="font-size:14px; color:rgba(255,255,255,0.6); margin-top:4px;">{{ t.trust_credits_label }}</div>
         </div>
         <div style="flex:1 1 200px; background:rgba(45,43,48,0.55); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:18px 22px;">
-          <div style="font-size:26px; font-weight:700; color:#fff; letter-spacing:-0.02em;">No money</div>
-          <div style="font-size:14px; color:rgba(255,255,255,0.6); margin-top:4px;">changes hands — ever</div>
+          <div style="font-size:26px; font-weight:700; color:#fff; letter-spacing:-0.02em;">{{ t.trust_nomoney_title }}</div>
+          <div style="font-size:14px; color:rgba(255,255,255,0.6); margin-top:4px;">{{ t.trust_nomoney_label }}</div>
         </div>
         <div style="flex:1 1 200px; background:rgba(45,43,48,0.55); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:18px 22px;">
-          <div style="font-size:26px; font-weight:700; color:#fff; letter-spacing:-0.02em;">Real people</div>
-          <div style="font-size:14px; color:rgba(255,255,255,0.6); margin-top:4px;">helping real neighbours</div>
+          <div style="font-size:26px; font-weight:700; color:#fff; letter-spacing:-0.02em;">{{ t.trust_real_title }}</div>
+          <div style="font-size:14px; color:rgba(255,255,255,0.6); margin-top:4px;">{{ t.trust_real_label }}</div>
         </div>
       </div>
     </section>
@@ -138,8 +163,8 @@
     <!-- HOW IT WORKS -->
     <section style="max-width:1180px; margin:0 auto; padding:clamp(56px,7vw,96px) 24px;">
       <div data-reveal style="margin-bottom:clamp(40px,5vw,68px); max-width:640px;">
-        <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:14px;">How Shok works</div>
-        <h2 style="margin:0; font-size:clamp(30px,4vw,46px); font-weight:700; letter-spacing:-0.03em; line-height:1.08;">A community where people genuinely help each other.</h2>
+        <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:14px;">{{ t.how_eyebrow }}</div>
+        <h2 style="margin:0; font-size:clamp(30px,4vw,46px); font-weight:700; letter-spacing:-0.03em; line-height:1.08;">{{ t.how_h2 }}</h2>
       </div>
       <div data-walk style="display:flex; flex-direction:column; gap:clamp(44px,6vw,92px);">
 
@@ -156,8 +181,8 @@
               <span style="font-size:14px; font-weight:700; color:var(--accent,#79EDAF); letter-spacing:0.12em;">01</span>
               <span style="flex:none; width:54px; height:1px; background:linear-gradient(90deg, color-mix(in srgb, var(--accent,#79EDAF) 55%, transparent), transparent);"></span>
             </div>
-            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">Welcome to Shok</h3>
-            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">A community where people genuinely help each other. Not a marketplace, not a service app — just real people showing up for one another.</p>
+            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">{{ t.step1_title }}</h3>
+            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">{{ t.step1_p }}</p>
           </div>
         </div>
 
@@ -174,8 +199,8 @@
               <span style="font-size:14px; font-weight:700; color:var(--accent,#79EDAF); letter-spacing:0.12em;">02</span>
               <span style="flex:none; width:54px; height:1px; background:linear-gradient(90deg, color-mix(in srgb, var(--accent,#79EDAF) 55%, transparent), transparent);"></span>
             </div>
-            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">Post what you need</h3>
-            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">Describe what you need, set the credits you're offering, and add <span style="color:#75AFEF; font-weight:600;">#keywords</span> so the right people can find it. You choose a deadline, and the post stays open until then.</p>
+            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">{{ t.step2_title }}</h3>
+            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">{{ t.step2_p }}</p>
           </div>
         </div>
 
@@ -192,8 +217,8 @@
               <span style="font-size:14px; font-weight:700; color:var(--accent,#79EDAF); letter-spacing:0.12em;">03</span>
               <span style="flex:none; width:54px; height:1px; background:linear-gradient(90deg, color-mix(in srgb, var(--accent,#79EDAF) 55%, transparent), transparent);"></span>
             </div>
-            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">Offer to help</h3>
-            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">Browse what neighbours need near you and place a bid — accept the credits offered or name your own price. The poster picks who helps, and you can message each other to sort out the rest.</p>
+            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">{{ t.step3_title }}</h3>
+            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">{{ t.step3_p }}</p>
           </div>
         </div>
 
@@ -210,8 +235,8 @@
               <span style="font-size:14px; font-weight:700; color:var(--accent,#79EDAF); letter-spacing:0.12em;">04</span>
               <span style="flex:none; width:54px; height:1px; background:linear-gradient(90deg, color-mix(in srgb, var(--accent,#79EDAF) 55%, transparent), transparent);"></span>
             </div>
-            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">Credits keep things fair</h3>
-            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">Everyone starts with some credits. Spend them to ask for help, they go to the helper whose bid you accept, and you earn them back by helping others. Invite someone and you both get a small boost.</p>
+            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">{{ t.step4_title }}</h3>
+            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">{{ t.step4_p }}</p>
           </div>
         </div>
 
@@ -228,8 +253,8 @@
               <span style="font-size:14px; font-weight:700; color:var(--accent,#79EDAF); letter-spacing:0.12em;">05</span>
               <span style="flex:none; width:54px; height:1px; background:linear-gradient(90deg, color-mix(in srgb, var(--accent,#79EDAF) 55%, transparent), transparent);"></span>
             </div>
-            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">Your community awaits</h3>
-            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">You're part of it now. Ask when you need a hand, give one when you can, and the community grows a little stronger every time.</p>
+            <h3 style="margin:0 0 14px; font-size:clamp(24px,2.9vw,30px); font-weight:700; letter-spacing:-0.02em; line-height:1.12;">{{ t.step5_title }}</h3>
+            <p style="margin:0; font-size:clamp(16px,1.7vw,18px); line-height:1.6; color:rgba(255,255,255,0.68);">{{ t.step5_p }}</p>
           </div>
         </div>
 
@@ -242,15 +267,15 @@
       <div style="position:absolute; inset:0; background:radial-gradient(ellipse 60% 50% at 50% 0%, color-mix(in srgb, var(--accent,#79EDAF) 9%, transparent), transparent 70%); pointer-events:none;"></div>
       <div style="position:relative; max-width:1180px; margin:0 auto; padding:0 24px;">
         <div data-reveal style="text-align:center; margin-bottom:40px;">
-          <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:14px;">A look inside</div>
-          <h2 style="margin:0 auto 14px; font-size:clamp(30px,4vw,46px); font-weight:700; letter-spacing:-0.03em; line-height:1.08; max-width:600px;">Native to iPhone. Simple by design.</h2>
-          <p style="margin:0 auto; font-size:15px; color:rgba(255,255,255,0.5); display:inline-flex; align-items:center; gap:9px;">Drag, scroll, or tap to explore</p>
+          <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:14px;">{{ t.gallery_eyebrow }}</div>
+          <h2 style="margin:0 auto 14px; font-size:clamp(30px,4vw,46px); font-weight:700; letter-spacing:-0.03em; line-height:1.08; max-width:600px;">{{ t.gallery_h2 }}</h2>
+          <p style="margin:0 auto; font-size:15px; color:rgba(255,255,255,0.5); display:inline-flex; align-items:center; gap:9px;">{{ t.gallery_sub }}</p>
         </div>
       </div>
 
       <div data-reveal data-coverflow style="position:relative; max-width:1180px; margin:0 auto; padding:0 16px; touch-action:pan-y;">
         <div data-cf-stage style="position:relative; height:clamp(430px,58vw,580px); perspective:1900px; cursor:grab;">
-          <sc-for list="{{ screenshots }}" as="shot" hint-placeholder-count="10">
+          <sc-for list="{{ screenshots }}" as="shot" hint-placeholder-count="8">
             <div data-cf-card data-index="{{ $index }}" role="button" tabindex="0" onClick="{{ cfCardClick }}" style="position:absolute; top:50%; left:50%; width:clamp(204px,25vw,248px); transform-style:preserve-3d; will-change:transform, opacity; transition:transform 0.55s cubic-bezier(0.22,0.61,0.36,1), opacity 0.55s ease; cursor:pointer;">
               <img src="{{ shot }}" alt="Shok app screen" draggable="false" decoding="async" style="width:100%; height:auto; display:block; border-radius:12px; box-shadow:0 30px 60px -16px rgba(0,0,0,0.8); user-select:none; -webkit-user-drag:none;" />
             </div>
@@ -265,7 +290,7 @@
         </button>
 
         <div data-cf-dots style="display:flex; gap:8px; justify-content:center; align-items:center; margin-top:clamp(24px,3vw,36px);">
-          <sc-for list="{{ screenshots }}" as="shot" hint-placeholder-count="10">
+          <sc-for list="{{ screenshots }}" as="shot" hint-placeholder-count="8">
             <button type="button" data-cf-dot data-index="{{ $index }}" onClick="{{ cfCardClick }}" aria-label="Go to screen" style="width:8px; height:8px; padding:0; border:none; border-radius:50%; background:rgba(255,255,255,0.25); cursor:pointer; transition:width 0.35s cubic-bezier(0.22,0.61,0.36,1), background 0.35s ease;"></button>
           </sc-for>
         </div>
@@ -279,9 +304,9 @@
       <div style="position:relative; overflow:hidden; border-radius:28px; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(135deg, rgba(45,43,48,0.9), rgba(20,19,22,0.9)); padding:clamp(36px,5vw,72px);">
         <div style="position:absolute; bottom:-140px; left:-80px; width:420px; height:420px; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb, var(--accent,#79EDAF) 16%, transparent), transparent 70%); pointer-events:none;"></div>
         <div data-reveal style="position:relative; max-width:760px;">
-          <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:20px;">Our mission</div>
-          <p style="margin:0 0 30px; font-size:clamp(24px,3.3vw,38px); font-weight:700; line-height:1.22; letter-spacing:-0.02em; text-wrap:balance;">Rebuilding the fabric of human connection through meaningful acts of kindness.</p>
-          <button onClick="{{ goMission }}" style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.16); cursor:pointer; font-family:inherit; font-size:16px; font-weight:600; color:#fff; padding:13px 24px; border-radius:100px;" style-hover="background:rgba(255,255,255,0.13); gap:12px;">Read our mission <span>→</span></button>
+          <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:20px;">{{ t.mission_eyebrow }}</div>
+          <p style="margin:0 0 30px; font-size:clamp(24px,3.3vw,38px); font-weight:700; line-height:1.22; letter-spacing:-0.02em; text-wrap:balance;">{{ t.mission_quote }}</p>
+          <button onClick="{{ goMission }}" style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.16); cursor:pointer; font-family:inherit; font-size:16px; font-weight:600; color:#fff; padding:13px 24px; border-radius:100px;" style-hover="background:rgba(255,255,255,0.13); gap:12px;">{{ t.missionteaser_btn }} <span>→</span></button>
         </div>
       </div>
     </section>
@@ -293,11 +318,11 @@
       <div style="position:relative; max-width:760px; margin:0 auto; padding:clamp(64px,9vw,120px) 24px; text-align:center;">
         <div data-reveal-group="0.1" style="display:contents;">
         <img src="assets/app_icon.png" alt="Shok" style="width:72px; height:72px; border-radius:18px; margin-bottom:28px; box-shadow:0 18px 40px -12px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08);" />
-        <h2 style="margin:0 0 18px; font-size:clamp(32px,5vw,54px); font-weight:700; letter-spacing:-0.035em; line-height:1.05; text-wrap:balance;">Make life smoother.</h2>
-        <p style="margin:0 auto 36px; font-size:clamp(17px,1.8vw,20px); line-height:1.5; color:rgba(255,255,255,0.7); max-width:480px;">Download Shok, claim your starter credits, and join a community that shows up for each other.</p>
+        <h2 style="margin:0 0 18px; font-size:clamp(32px,5vw,54px); font-weight:700; letter-spacing:-0.035em; line-height:1.05; text-wrap:balance;">{{ t.finalcta_h2 }}</h2>
+        <p style="margin:0 auto 36px; font-size:clamp(17px,1.8vw,20px); line-height:1.5; color:rgba(255,255,255,0.7); max-width:480px;">{{ t.finalcta_p }}</p>
         <a href="{{ appStore }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:11px; background:var(--accent,#79EDAF); color:#000; padding:16px 30px; border-radius:100px;" style-hover="opacity:0.9; transform:translateY(-1px);">
           <svg viewBox="0 0 384 512" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
-          <span style="display:flex; flex-direction:column; line-height:1; text-align:left;"><span style="font-size:11px; font-weight:500; opacity:0.7;">Download on the</span><span style="font-size:19px; font-weight:700; margin-top:3px;">App Store</span></span>
+          <span style="display:flex; flex-direction:column; line-height:1; text-align:left;"><span style="font-size:11px; font-weight:500; opacity:0.7;">{{ t.appstore_small }}</span><span style="font-size:19px; font-weight:700; margin-top:3px;">{{ t.appstore_big }}</span></span>
         </a>
         </div>
       </div>
@@ -312,8 +337,8 @@
     <section style="position:relative; overflow:hidden;">
       <div style="position:absolute; top:-120px; right:-100px; width:560px; height:560px; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb, var(--accent,#79EDAF) 16%, transparent), transparent 68%); pointer-events:none;"></div>
       <div data-reveal-group="0.12" style="position:relative; max-width:820px; margin:0 auto; padding:clamp(56px,8vw,108px) 24px clamp(36px,5vw,56px);">
-        <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:20px;">Our Mission</div>
-        <h1 style="margin:0; font-size:clamp(34px,5.2vw,60px); font-weight:700; line-height:1.08; letter-spacing:-0.03em; text-wrap:balance;">Rebuilding the fabric of human connection through meaningful acts of kindness.</h1>
+        <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:20px;">{{ t.mission_eyebrow }}</div>
+        <h1 style="margin:0; font-size:clamp(34px,5.2vw,60px); font-weight:700; line-height:1.08; letter-spacing:-0.03em; text-wrap:balance;">{{ t.mission_quote }}</h1>
       </div>
     </section>
 
@@ -322,40 +347,40 @@
       <div style="display:flex; gap:24px; align-items:flex-start;">
         <div style="flex:none; width:40px; height:1px; background:var(--accent,#79EDAF); margin-top:18px;"></div>
         <div>
-          <h2 style="margin:0 0 14px; font-size:clamp(22px,2.6vw,28px); font-weight:700; letter-spacing:-0.02em;">Reconnecting a disconnected world</h2>
-          <p style="margin:0; font-size:18px; line-height:1.65; color:rgba(255,255,255,0.72);">In an era where social media platforms have paradoxically made us more isolated than ever, we believe it's time for a fundamental shift. While traditional social networks encourage endless scrolling and superficial interactions, they've created a generation that's more connected to screens than to the people around them.</p>
+          <h2 style="margin:0 0 14px; font-size:clamp(22px,2.6vw,28px); font-weight:700; letter-spacing:-0.02em;">{{ t.mission_sec1_h2 }}</h2>
+          <p style="margin:0; font-size:18px; line-height:1.65; color:rgba(255,255,255,0.72);">{{ t.mission_sec1_p }}</p>
         </div>
       </div>
 
       <div style="display:flex; gap:24px; align-items:flex-start;">
         <div style="flex:none; width:40px; height:1px; background:var(--accent,#79EDAF); margin-top:18px;"></div>
         <div>
-          <h2 style="margin:0 0 14px; font-size:clamp(22px,2.6vw,28px); font-weight:700; letter-spacing:-0.02em;">Real help, real connection, real community</h2>
-          <p style="margin:0; font-size:18px; line-height:1.65; color:rgba(255,255,255,0.72);">When the world feels fractured by conflict, economic strain, and widening divides, the power of genuine human connection has never been more critical. We're building an inclusive network built on trust, where every task you post and every favour you complete rekindles hope in humanity. This isn't about virtual likes or digital validation — it's about real people helping real people.</p>
+          <h2 style="margin:0 0 14px; font-size:clamp(22px,2.6vw,28px); font-weight:700; letter-spacing:-0.02em;">{{ t.mission_sec2_h2 }}</h2>
+          <p style="margin:0; font-size:18px; line-height:1.65; color:rgba(255,255,255,0.72);">{{ t.mission_sec2_p }}</p>
         </div>
       </div>
 
       <div style="display:flex; gap:24px; align-items:flex-start;">
         <div style="flex:none; width:40px; height:1px; background:var(--accent,#79EDAF); margin-top:18px;"></div>
         <div>
-          <h2 style="margin:0 0 14px; font-size:clamp(22px,2.6vw,28px); font-weight:700; letter-spacing:-0.02em;">From strangers to friends through acts of kindness</h2>
-          <p style="margin:0; font-size:18px; line-height:1.65; color:rgba(255,255,255,0.72);">We believe that true friendships are forged through shared experiences and mutual support, not through comments and reactions. When someone helps you move furniture, tutors your child, or simply lends a hand when you need it most, something magical happens — barriers break down, trust is built, and genuine connections are formed.</p>
+          <h2 style="margin:0 0 14px; font-size:clamp(22px,2.6vw,28px); font-weight:700; letter-spacing:-0.02em;">{{ t.mission_sec3_h2 }}</h2>
+          <p style="margin:0; font-size:18px; line-height:1.65; color:rgba(255,255,255,0.72);">{{ t.mission_sec3_p }}</p>
         </div>
       </div>
 
       <div style="display:flex; gap:24px; align-items:flex-start;">
         <div style="flex:none; width:40px; height:1px; background:var(--accent,#79EDAF); margin-top:18px;"></div>
         <div>
-          <h2 style="margin:0 0 14px; font-size:clamp(22px,2.6vw,28px); font-weight:700; letter-spacing:-0.02em;">Transforming uncertainty into solidarity</h2>
-          <p style="margin:0; font-size:18px; line-height:1.65; color:rgba(255,255,255,0.72);">Our platform creates meaningful interactions where favours come with real stakes, real rewards, and real people you can trust. Every credit spent, every task completed, and every moment of help transforms uncertainty into solidarity, one act of kindness at a time. Together, we're not just building an app — we're rebuilding the fabric of human connection.</p>
+          <h2 style="margin:0 0 14px; font-size:clamp(22px,2.6vw,28px); font-weight:700; letter-spacing:-0.02em;">{{ t.mission_sec4_h2 }}</h2>
+          <p style="margin:0; font-size:18px; line-height:1.65; color:rgba(255,255,255,0.72);">{{ t.mission_sec4_p }}</p>
         </div>
       </div>
 
       <div style="margin-top:12px; padding:32px; border-radius:20px; background:rgba(45,43,48,0.7); border:1px solid rgba(255,255,255,0.07); display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px;">
-        <div style="font-size:19px; font-weight:600; max-width:380px;">Ready to be part of it?</div>
+        <div style="font-size:19px; font-weight:600; max-width:380px;">{{ t.mission_ready }}</div>
         <a href="{{ appStore }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:10px; background:var(--accent,#79EDAF); color:#000; padding:14px 24px; border-radius:100px; font-weight:700; font-size:16px;" style-hover="opacity:0.9;">
           <svg viewBox="0 0 384 512" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
-          Download Shok
+          {{ t.mission_download }}
         </a>
       </div>
     </section>
@@ -498,20 +523,20 @@
           <img src="assets/app_icon.png" alt="Shok" style="width:32px; height:32px; border-radius:9px;" />
           <span style="font-size:19px; font-weight:700;">Shok</span>
         </div>
-        <p style="margin:0 0 18px; font-size:15px; line-height:1.5; color:rgba(255,255,255,0.55);">Help when you need it. Have questions? We'd love to hear from you.</p>
+        <p style="margin:0 0 18px; font-size:15px; line-height:1.5; color:rgba(255,255,255,0.55);">{{ t.footer_tagline }}</p>
         <a href="mailto:support@shok.app" style="font-size:15px; color:var(--accent,#79EDAF); font-weight:600;">support@shok.app</a>
       </div>
       <div style="display:flex; gap:64px; flex-wrap:wrap;">
         <div>
-          <div style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:rgba(255,255,255,0.4); margin-bottom:16px;">Pages</div>
+          <div style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:rgba(255,255,255,0.4); margin-bottom:16px;">{{ t.footer_pages }}</div>
           <div style="display:flex; flex-direction:column; gap:11px;">
-            <button onClick="{{ goHome }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left; font-size:15px; color:rgba(255,255,255,0.75);" style-hover="color:#fff;">Home</button>
-            <button onClick="{{ goMission }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left; font-size:15px; color:rgba(255,255,255,0.75);" style-hover="color:#fff;">Our Mission</button>
-            <button onClick="{{ goPrivacy }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left; font-size:15px; color:rgba(255,255,255,0.75);" style-hover="color:#fff;">Privacy Policy</button>
+            <button onClick="{{ goHome }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left; font-size:15px; color:rgba(255,255,255,0.75);" style-hover="color:#fff;">{{ t.nav_home }}</button>
+            <button onClick="{{ goMission }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left; font-size:15px; color:rgba(255,255,255,0.75);" style-hover="color:#fff;">{{ t.nav_mission }}</button>
+            <button onClick="{{ goPrivacy }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left; font-size:15px; color:rgba(255,255,255,0.75);" style-hover="color:#fff;">{{ t.nav_privacy }}</button>
           </div>
         </div>
         <div>
-          <div style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:rgba(255,255,255,0.4); margin-bottom:16px;">Get the app</div>
+          <div style="font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:rgba(255,255,255,0.4); margin-bottom:16px;">{{ t.footer_getapp }}</div>
           <a href="{{ appStore }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.14); color:#fff; padding:11px 18px; border-radius:100px; font-size:14px; font-weight:600;" style-hover="background:rgba(255,255,255,0.13);">
             <svg viewBox="0 0 384 512" width="17" height="17" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"></path></svg>
             App Store
@@ -520,15 +545,33 @@
       </div>
     </div>
     <div style="border-top:1px solid rgba(255,255,255,0.06);">
-      <div style="max-width:1180px; margin:0 auto; padding:20px 24px; font-size:13px; color:rgba(255,255,255,0.4);">© ShokApp 2026. All rights reserved.</div>
+      <div style="max-width:1180px; margin:0 auto; padding:20px 24px; font-size:13px; color:rgba(255,255,255,0.4);">{{ t.footer_copyright }}</div>
     </div>
   </footer>
 
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#79EDAF&quot;,&quot;options&quot;:[&quot;#79EDAF&quot;,&quot;#FFCE2F&quot;,&quot;#75AFEF&quot;],&quot;tsType&quot;:&quot;string&quot;},&quot;showGallery&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showMissionTeaser&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const LANGUAGES = [
+  { code: 'en', label: 'English', native: 'English' },
+  { code: 'sq', label: 'Albanian', native: 'Shqip' },
+  { code: 'de', label: 'German', native: 'Deutsch' },
+  { code: 'es', label: 'Spanish', native: 'Español' },
+  { code: 'pt', label: 'Portuguese', native: 'Português' },
+  { code: 'ru', label: 'Russian', native: 'Русский' },
+  { code: 'uk', label: 'Ukrainian', native: 'Українська' },
+  { code: 'ar', label: 'Arabic', native: 'العربية', rtl: true },
+  { code: 'he', label: 'Hebrew', native: 'עברית', rtl: true },
+  { code: 'fa', label: 'Persian', native: 'فارسی', rtl: true },
+  { code: 'hi', label: 'Hindi', native: 'हिन्दी' },
+  { code: 'id', label: 'Indonesian', native: 'Bahasa Indonesia' },
+  { code: 'ja', label: 'Japanese', native: '日本語' },
+  { code: 'zh', label: 'Chinese', native: '中文' },
+];
+
+
 class Component extends DCLogic {
-  state = { page: 'home', menuOpen: false };
+  state = { page: 'home', menuOpen: false, langMenuOpen: false, lang: this.detectLang() };
 
   go(page) {
     return () => {
@@ -540,13 +583,48 @@ class Component extends DCLogic {
 
   toggleMenu = () => this.setState(s => ({ menuOpen: !s.menuOpen }));
 
+  detectLang() {
+    if (typeof window === 'undefined') return 'en';
+    const supported = LANGUAGES.map(l => l.code);
+    try {
+      const saved = localStorage.getItem('shok_lang');
+      if (saved && supported.includes(saved)) return saved;
+    } catch (e) { /* private mode — fall through to detection */ }
+    const raw = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || 'en'];
+    for (const tag of raw) {
+      const base = String(tag).toLowerCase().split('-')[0];
+      if (supported.includes(base)) return base;
+    }
+    return 'en';
+  }
+
+  applyDocAttrs(code) {
+    if (typeof document === 'undefined') return;
+    const meta = LANGUAGES.find(l => l.code === code);
+    document.documentElement.lang = code;
+    document.documentElement.dir = (meta && meta.rtl) ? 'rtl' : 'ltr';
+  }
+
+  setLang = (code) => {
+    if (!LANGUAGES.some(l => l.code === code)) return;
+    this.setState({ lang: code, langMenuOpen: false });
+    try { localStorage.setItem('shok_lang', code); } catch (e) { /* private mode */ }
+    this.applyDocAttrs(code);
+  };
+
+  toggleLangMenu = () => this.setState(s => ({ langMenuOpen: !s.langMenuOpen }));
+  closeLangMenu = () => this.setState({ langMenuOpen: false });
+  selectLangClick = (e) => this.setLang(e.currentTarget.getAttribute('data-code'));
+
   componentDidMount() {
+    this.applyDocAttrs(this.state.lang);
     this.maybeRedirectIOS();
     this._reduce = typeof window !== 'undefined' && window.matchMedia
       && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this._cfActive = null;
     this.scheduleReveals();
     this.scheduleCoverflow();
+    this.scheduleHeroImage();
   }
 
   maybeRedirectIOS() {
@@ -579,6 +657,7 @@ class Component extends DCLogic {
     if (!prevState || prevState.page !== this.state.page) {
       this.scheduleReveals();
       this.scheduleCoverflow();
+      this.scheduleHeroImage();
     }
   }
 
@@ -591,7 +670,30 @@ class Component extends DCLogic {
     (this._cfTimers || []).forEach(t => clearTimeout(t));
     if (this._cfResize) window.removeEventListener('resize', this._cfResize);
     if (this._cfScroll) window.removeEventListener('scroll', this._cfScroll);
+    (this._heroTimers || []).forEach(t => clearTimeout(t));
     this.stopAutoplay();
+  }
+
+  // Eager-load with a capped, backed-off retry so a card that fails on a
+  // flaky/throttled connection heals itself instead of needing a page reload.
+  wireImgRetry(img) {
+    if (!img || img._cfWired) return;
+    img._cfWired = true;
+    img.loading = 'eager';
+    const retry = () => {
+      const t = (img._cfTries || 0) + 1; img._cfTries = t;
+      if (t > 3) return;
+      const base = img.src.split('?')[0];
+      setTimeout(() => { img.src = base + '?retry=' + t; }, 500 * t);
+    };
+    img.addEventListener('error', retry);
+    if (img.complete && img.naturalWidth === 0) retry();
+  }
+
+  scheduleHeroImage() {
+    if (typeof window === 'undefined') return;
+    (this._heroTimers || []).forEach(t => clearTimeout(t));
+    this._heroTimers = [0, 140, 420, 900].map(d => setTimeout(() => this.wireImgRetry(document.querySelector('[data-hero-img]')), d));
   }
 
   // ---- Coverflow gallery ----
@@ -613,20 +715,7 @@ class Component extends DCLogic {
     // skipping the rotated-away cards). This heals any that still fail on a
     // flaky/throttled connection by retrying, so a blank card recovers on its
     // own instead of needing a full page reload.
-    cards.forEach(card => {
-      const img = card.querySelector('img');
-      if (!img || img._cfWired) return;
-      img._cfWired = true;
-      img.loading = 'eager';
-      const retry = () => {
-        const t = (img._cfTries || 0) + 1; img._cfTries = t;
-        if (t > 3) return;
-        const base = img.src.split('?')[0];
-        setTimeout(() => { img.src = base + '?retry=' + t; }, 500 * t);
-      };
-      img.addEventListener('error', retry);
-      if (img.complete && img.naturalWidth === 0) retry();
-    });
+    cards.forEach(card => this.wireImgRetry(card.querySelector('img')));
 
     const n = cards.length;
     if (this._cfActive == null || this._cfActive >= n) this._cfActive = Math.floor((n - 1) / 2);
@@ -995,9 +1084,17 @@ class Component extends DCLogic {
         // safety net: guarantee final position + active state even if rAF is throttled
         setTimeout(() => { se.scrollTop = target; this.updateToc(); }, dur + 60);
       },
-      screenshots: Array.from({length:10}, (_,i)=>`images/screenshot_${i+1}.jpeg`),
+      screenshots: Array.from({length:8}, (_,i)=>`images/lang/${this.state.lang}/${i+1}.png`),
       showGallery: this.props.showGallery ?? true,
       showMissionTeaser: this.props.showMissionTeaser ?? true,
+      lang: this.state.lang,
+      languages: LANGUAGES,
+      currentLangCode: (this.state.lang || 'en').toUpperCase(),
+      langMenuOpen: this.state.langMenuOpen,
+      toggleLangMenu: this.toggleLangMenu,
+      closeLangMenu: this.closeLangMenu,
+      selectLangClick: this.selectLangClick,
+      t: window.TRANSLATIONS[this.state.lang] || window.TRANSLATIONS.en,
     };
   }
 }
