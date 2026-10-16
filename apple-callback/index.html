@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Shok</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#000;color:#fff;min-height:100%;}
+  body{font-family:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;}
+  main{max-width:360px;width:100%;text-align:center;}
+  img{width:72px;height:72px;border-radius:16px;margin-bottom:24px;}
+  h1{font-size:22px;font-weight:700;margin:0 0 8px;}
+  p{font-size:16px;line-height:1.5;color:rgba(255,255,255,0.7);margin:0 0 24px;}
+  a.button{display:inline-block;background:#79EDAF;color:#000;font-weight:700;font-size:17px;padding:14px 28px;border-radius:14px;text-decoration:none;}
+  [hidden]{display:none !important;}
+</style>
+</head>
+<body>
+<main>
+  <img src="../assets/app_icon.png" alt="Shok">
+  <div id="open-state">
+    <h1>Returning to Shok</h1>
+    <p>If the app does not open automatically, tap the button below.</p>
+    <a id="open-link" class="button" href="shok://apple-callback">Open Shok</a>
+  </div>
+  <div id="invalid-state" hidden>
+    <h1>Nothing to sign in with</h1>
+    <p>This page only completes a Sign in with Apple started from the Shok app. Open Shok and try again.</p>
+  </div>
+</main>
+<script>
+(function () {
+  // Apple redirects here with the result in the URL fragment, which browsers never send to a server.
+  // Only these fields are relayed to the app.
+  var RELAYED_FIELDS = ["id_token", "state", "error"];
+  var APP_LINK = "shok://apple-callback";
+
+  var fragment = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  var relayed = new URLSearchParams();
+
+  RELAYED_FIELDS.forEach(function (field) {
+    var value = fragment.get(field);
+    if (value) {
+      relayed.set(field === "id_token" ? "idToken" : field, value);
+    }
+  });
+
+  // Remove the token from the address bar and history.
+  history.replaceState(null, "", window.location.pathname);
+
+  if (!relayed.has("idToken") && !relayed.has("error")) {
+    document.getElementById("open-state").hidden = true;
+    document.getElementById("invalid-state").hidden = false;
+    return;
+  }
+
+  var target = APP_LINK + "?" + relayed.toString();
+  document.getElementById("open-link").href = target;
+  window.location.replace(target);
+})();
+</script>
+</body>
+</html>
