@@ -25,7 +25,7 @@
   <div id="open-state">
     <h1>Returning to Shok</h1>
     <p>If the app does not open automatically, tap the button below.</p>
-    <a id="open-link" class="button" href="shok://apple-callback">Open Shok</a>
+    <a id="open-link" class="button" href="shokapp://apple-callback">Open Shok</a>
   </div>
   <div id="invalid-state" hidden>
     <h1>Nothing to sign in with</h1>
@@ -35,9 +35,9 @@
 <script>
 (function () {
   // Apple redirects here with the result in the URL fragment, which browsers never send to a server.
-  // Only these fields are relayed to the app.
+  // Only these fields are relayed to the app, under the same names.
   var RELAYED_FIELDS = ["id_token", "state", "error"];
-  var APP_LINK = "shok://apple-callback";
+  var APP_LINK = "shokapp://apple-callback";
 
   var fragment = new URLSearchParams(window.location.hash.replace(/^#/, ""));
   var relayed = new URLSearchParams();
@@ -45,14 +45,14 @@
   RELAYED_FIELDS.forEach(function (field) {
     var value = fragment.get(field);
     if (value) {
-      relayed.set(field === "id_token" ? "idToken" : field, value);
+      relayed.set(field, value);
     }
   });
 
   // Remove the token from the address bar and history.
   history.replaceState(null, "", window.location.pathname);
 
-  if (!relayed.has("idToken") && !relayed.has("error")) {
+  if (!relayed.has("id_token") && !relayed.has("error")) {
     document.getElementById("open-state").hidden = true;
     document.getElementById("invalid-state").hidden = false;
     return;
