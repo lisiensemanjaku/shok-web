@@ -571,7 +571,15 @@ const LANGUAGES = [
 
 
 class Component extends DCLogic {
-  state = { page: 'home', menuOpen: false, langMenuOpen: false, lang: this.detectLang() };
+  state = { page: this.initialPage(), menuOpen: false, langMenuOpen: false, lang: this.detectLang() };
+
+  // /privacy/ and /mission/ have no content of their own (see privacy/index.html, mission/index.html) — each
+  // redirects here with ?page=<name> so this single-page app lands directly on the right section.
+  initialPage() {
+    if (typeof window === 'undefined') return 'home';
+    const requested = new URLSearchParams(window.location.search).get('page');
+    return ['home', 'mission', 'privacy'].includes(requested) ? requested : 'home';
+  }
 
   go(page) {
     return () => {
