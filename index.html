@@ -488,7 +488,7 @@
 
         <div id="sec-7" data-toc-section>
           <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; letter-spacing:-0.01em;">7. Children's privacy</h2>
-          <p style="margin:0; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">Our App is not directed to children under the age of 16. We do not knowingly collect personal data from children under 16. If you believe we have collected such data, please contact us and we will promptly delete it.</p>
+          <p style="margin:0; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">Our App is not directed to children under the age of 18. We do not knowingly collect personal data from children under 18. If you believe we have collected such data, please contact us and we will promptly delete it. See our <button onClick="{{ goChildSafety }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; font-size:inherit; color:var(--accent,#79EDAF); font-weight:600;">Child Safety Standards</button> for more.</p>
         </div>
 
         <div id="sec-8" data-toc-section>
@@ -554,6 +554,59 @@
   </main>
   </sc-if>
 
+  <!-- ═══════════════════════ CHILD SAFETY STANDARDS ═══════════════════════ -->
+  <sc-if value="{{ isChildSafety }}" hint-placeholder-val="{{ false }}">
+  <main>
+    <section style="max-width:800px; margin:0 auto; padding:clamp(56px,8vw,96px) 24px clamp(28px,4vw,40px);">
+      <div style="font-size:13px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent,#79EDAF); margin-bottom:18px;">Child Safety</div>
+      <h1 style="margin:0 0 24px; font-size:clamp(32px,4.6vw,52px); font-weight:700; letter-spacing:-0.03em; line-height:1.06;">Child Safety Standards</h1>
+      <p style="margin:0; font-size:18px; line-height:1.6; color:rgba(255,255,255,0.72); max-width:620px;">Shok has zero tolerance for child sexual abuse and exploitation (CSAE). This page explains our standards, how to report a concern, and how we respond.</p>
+    </section>
+
+    <section style="max-width:800px; margin:0 auto; padding:0 24px clamp(64px,9vw,120px); display:flex; flex-direction:column; gap:40px;">
+      <hr style="border:none; height:1px; background:rgba(255,255,255,0.1); margin:0 0 4px;" />
+
+      <div>
+        <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; letter-spacing:-0.01em;">1. Shok is an adults-only app</h2>
+        <p style="margin:0; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">Shok is restricted to users aged 18 and older. Account creation requires entering a birth date, and the app does not allow a date of birth that would indicate the user is under 18. Shok is not directed at children, and we do not knowingly allow minors to hold an account.</p>
+      </div>
+
+      <div>
+        <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; letter-spacing:-0.01em;">2. Zero tolerance for CSAE</h2>
+        <p style="margin:0; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">We do not permit content or conduct that sexualizes, abuses, or exploits children in any form, including grooming, solicitation, or the sharing of child sexual abuse material (CSAM). Accounts and content found to violate this standard are removed, and the responsible accounts are permanently banned.</p>
+      </div>
+
+      <div>
+        <h2 style="margin:0 0 12px; font-size:22px; font-weight:700; letter-spacing:-0.01em;">3. How to report a concern</h2>
+        <p style="margin:0 0 14px; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">Every post, comment, and user profile in Shok can be reported directly in the app:</p>
+        <ol style="margin:0; padding-left:22px; color:rgba(255,255,255,0.7); font-size:16px; line-height:1.8;">
+          <li>Open the post, comment, or profile you want to report.</li>
+          <li>Tap the <strong style="color:#fff; font-weight:600;">⋯</strong> menu (or long-press, for conversations) and choose <strong style="color:#fff; font-weight:600;">Report</strong>.</li>
+          <li>Select a reason and submit. Our team reviews every report.</li>
+        </ol>
+        <p style="margin:14px 0 0; font-size:16px; line-height:1.65; color:rgba(255,255,255,0.7);">If you believe a child is in immediate danger, contact your local emergency services first. You can also reach us directly at <a href="mailto:support@shok.app" style="color:var(--accent,#79EDAF); font-weight:600;">support@shok.app</a> for any child safety concern.</p>
+      </div>
+
+      <div style="padding:28px; border-radius:18px; background:rgba(45,43,48,0.7); border:1px solid rgba(255,255,255,0.07);">
+        <h2 style="margin:0 0 12px; font-size:20px; font-weight:700;">4. How we respond</h2>
+        <ul style="margin:0; padding-left:22px; color:rgba(255,255,255,0.7); font-size:16px; line-height:1.7;">
+          <li>Reported content and accounts are reviewed and, where they violate this policy, removed or banned.</li>
+          <li>We comply with applicable child safety laws and report CSAE to the relevant national and regional authorities (for example NCMEC in the United States) as legally required.</li>
+          <li>We cooperate with law enforcement investigations into child exploitation to the extent required by law.</li>
+        </ul>
+      </div>
+
+      <div style="padding:28px; border-radius:18px; background:rgba(45,43,48,0.7); border:1px solid rgba(255,255,255,0.07);">
+        <h2 style="margin:0 0 12px; font-size:20px; font-weight:700;">Designated point of contact</h2>
+        <p style="margin:0 0 6px; font-size:16px; line-height:1.6; color:rgba(255,255,255,0.7);">For questions about these standards or our CSAE prevention and compliance practices, contact:</p>
+        <p style="margin:0 0 4px; font-size:16px; color:#fff; font-weight:600;">Shok</p>
+        <a href="mailto:support@shok.app" style="font-size:16px; color:var(--accent,#79EDAF); font-weight:600;">support@shok.app</a>
+        <p style="margin:14px 0 0; font-size:13px; color:rgba(255,255,255,0.45);">Last updated on 21.10.2026</p>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
   <!-- ─── FOOTER ─────────────────────────────────────────── -->
   <footer style="border-top:1px solid rgba(255,255,255,0.08); background:#000;">
     <div style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,64px) 24px; display:flex; flex-wrap:wrap; gap:40px; justify-content:space-between;">
@@ -573,6 +626,7 @@
             <button onClick="{{ goMission }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left; font-size:15px; color:rgba(255,255,255,0.75);" style-hover="color:#fff;">{{ t.nav_mission }}</button>
             <button onClick="{{ goPrivacy }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left; font-size:15px; color:rgba(255,255,255,0.75);" style-hover="color:#fff;">{{ t.nav_privacy }}</button>
             <button onClick="{{ goDeleteAccount }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left; font-size:15px; color:rgba(255,255,255,0.75);" style-hover="color:#fff;">Delete Account</button>
+            <button onClick="{{ goChildSafety }}" style="background:none; border:none; padding:0; cursor:pointer; font-family:inherit; text-align:left; font-size:15px; color:rgba(255,255,255,0.75);" style-hover="color:#fff;">Child Safety</button>
           </div>
         </div>
         <div>
@@ -613,12 +667,12 @@ const LANGUAGES = [
 class Component extends DCLogic {
   state = { page: this.initialPage(), menuOpen: false, langMenuOpen: false, lang: this.detectLang() };
 
-  // /privacy/, /mission/ and /delete-account/ have no content of their own (see their index.html files) — each
-  // redirects here with ?page=<name> so this single-page app lands directly on the right section.
+  // /privacy/, /mission/, /delete-account/ and /child-safety/ have no content of their own (see their index.html
+  // files) — each redirects here with ?page=<name> so this single-page app lands directly on the right section.
   initialPage() {
     if (typeof window === 'undefined') return 'home';
     const requested = new URLSearchParams(window.location.search).get('page');
-    return ['home', 'mission', 'privacy', 'deleteaccount'].includes(requested) ? requested : 'home';
+    return ['home', 'mission', 'privacy', 'deleteaccount', 'childsafety'].includes(requested) ? requested : 'home';
   }
 
   go(page) {
@@ -1100,10 +1154,12 @@ class Component extends DCLogic {
       isMission: page === 'mission',
       isPrivacy: page === 'privacy',
       isDeleteAccount: page === 'deleteaccount',
+      isChildSafety: page === 'childsafety',
       goHome: this.go('home'),
       goMission: this.go('mission'),
       goPrivacy: this.go('privacy'),
       goDeleteAccount: this.go('deleteaccount'),
+      goChildSafety: this.go('childsafety'),
       menuOpen: this.state.menuOpen,
       menuOpenClass: this.state.menuOpen ? 'open' : '',
       toggleMenu: this.toggleMenu,
